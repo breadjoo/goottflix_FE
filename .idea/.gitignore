@@ -6,3 +6,53 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+
+# Node modules 폴더 제외
+node_modules/
+
+# 빌드 결과물 제외 (create-react-app의 빌드 디렉터리)
+build/
+
+# 로컬 개발 환경에만 필요한 파일들
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 로그 파일 제외
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 운영체제에서 생성하는 불필요한 파일들
+.DS_Store
+Thumbs.db
+
+# IntelliJ 관련 파일 제외 (프로젝트에서 사용하는 경우)
+.idea/
+
+# VSCode 관련 파일 제외 (사용하는 경우)
+.vscode/
+
+# 테스트 환경 파일들 제외
+coverage/
+
+# eslint 관련 캐시 파일 제외
+.eslintcache
+
+# 서비스 워커 파일 제외 (선택 사항)
+public/sw.js
+public/manifest.json
+public/asset-manifest.json
+
+# Parcel cache (parcel 사용 시)
+.cache/
+
+# yarn.lock or package-lock.json 중 하나만 사용한다면 제외
+yarn.lock
+
+# Mac OS 또는 Linux에서 사용되는 파일 제외 (임시 파일)
+*.swp
+*~
+
