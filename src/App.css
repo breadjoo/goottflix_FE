@@ -24,6 +24,14 @@
   color: white;
 }
 
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #000000, #001f3f); /* 페이지 전체에 그라데이션 적용 */
+  background-size: cover;
+}
+
 .App-link {
   color: #61dafb;
 }

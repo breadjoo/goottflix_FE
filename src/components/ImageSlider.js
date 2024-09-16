@@ -5,6 +5,7 @@ const images = [
     '/images/에일리언.jpg',
     '/images/비틀쥬스.jpg',
     '/images/인사이드아웃2.jpg',
+    '/images/반지의제왕.jpg',
 ];
 
 const ImageSlider = () => {
