@@ -1,26 +1,31 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark" style={{backgroundColor: '#001f3f'}}>
+        <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001f3f' }}>
             <div className="container-fluid">
-            <a className="navbar-brand" href="#home">GoottFlix (사진)?</a>
+                {/* 이미지로 대체 */}
+                <Link className="navbar-brand" to="/">
+                    <img
+                        src="/images/goottflix.png"  /* 로고 이미지 파일 경로 */
+                        alt="GoottFlix Logo"
+                        style={{ height: '60px' }}   /* 적절한 이미지 크기 설정 */
+                    />  GoottFlix
+                </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#home">메인페이지</a>
+                            <Link className="nav-link active" aria-current="page" to="/">메인페이지</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#menu1">메뉴1</a>
+                            <Link className="nav-link" to="/signup">회원가입</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#menu2">회원가입</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#menu3">로그인</a>
+                            <Link className="nav-link" to="/login">로그인</Link>
                         </li>
                     </ul>
                 </div>
