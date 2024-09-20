@@ -2,6 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+    window.IMP.init("imp77446200");
+
+    const onClickPay = async () => {
+        window.IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "card",
+            amount: "10",
+            name: "구독",
+            merchant_uid: "ord20240920-000001",
+        }, function(response){
+
+        });
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001f3f' }}>
             <div className="container-fluid">
@@ -18,6 +32,11 @@ const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                            <button className="payment-button" type="button" onClick={onClickPay}>
+                                구독
+                            </button>
+                        </li>
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/">메인페이지</Link>
                         </li>
