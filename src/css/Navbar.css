@@ -1,0 +1,74 @@
+.navbar-nav {
+    display: flex !important;
+    justify-content: flex-end !important; /* 강제로 오른쪽 정렬 */
+    width: 100%; /* 전체 너비 */
+}
+
+/* 알림 팝업 전체 스타일 */
+.notification-popup {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 300px;
+}
+
+/* 알림 팝업 상단 */
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notification-header h5 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.notification-header button {
+    font-size: 14px;
+    color: #007bff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* 알림 항목 스타일 */
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.notification-content {
+    flex-grow: 1;
+}
+
+.notification-content p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.notification-time {
+    display: block;
+    font-size: 12px;
+    color: #888;
+}

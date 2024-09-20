@@ -1,0 +1,17 @@
+.movie-container {
+    display: flex;
+    flex-wrap: wrap; /* 여러 줄로 표시 가능 */
+    justify-content: space-between; /* 카드 사이에 공간을 분배 */
+    gap: 16px; /* 카드 사이의 간격 조정 */
+}
+
+.movie-card {
+    flex: 1 1 calc(25% - 16px); /* 4개의 카드가 한 줄에 오도록 설정 */
+    box-sizing: border-box; /* 패딩과 마진을 포함한 박스 크기 계산 */
+}
+
+/*.card-img {*/
+/*    width: 100%; !* 이미지 너비를 카드에 맞춤 *!*/
+/*    height: 200px; !* 고정된 높이 *!*/
+/*    object-fit: fill; !* 이미지 비율 유지하면서 잘림 *!*/
+/*}*/
