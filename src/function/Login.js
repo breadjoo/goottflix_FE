@@ -42,6 +42,10 @@ function Login() {
         window.location.href = "http://localhost:8080/oauth2/authorization/google";
     };
 
+    const onKakaoLogin = () => {
+        window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    };
+
     const testAxiosRequest = () => {
         axios
             .get("http://localhost:8080/test", { withCredentials: true })
@@ -62,7 +66,7 @@ function Login() {
             <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh', width: '100vw' }}>
                 <Card style={{ width: '400px', backgroundColor: '#001f3f', color: 'white' }}>
                     <Card.Body>
-                        <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>로그인</h2>
+                        <h2 className="text-center mb-4" style={{color: '#00bfff'}}>로그인</h2>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group id="loginId" className="mb-3">
                                 <Form.Label>로그인 ID</Form.Label>
@@ -72,7 +76,7 @@ function Login() {
                                     value={formData.loginId}
                                     onChange={handleChange}
                                     required
-                                    style={{ backgroundColor: '#000', color: 'white' }}
+                                    style={{backgroundColor: '#000', color: 'white'}}
                                 />
                             </Form.Group>
                             <Form.Group id="password" className="mb-3">
@@ -83,7 +87,7 @@ function Login() {
                                     value={formData.password}
                                     onChange={handleChange}
                                     required
-                                    style={{ backgroundColor: '#000', color: 'white' }}
+                                    style={{backgroundColor: '#000', color: 'white'}}
                                 />
                             </Form.Group>
                             <Button variant="outline-light" type="submit" className="w-100 mt-3">
@@ -91,7 +95,7 @@ function Login() {
                             </Button>
                         </Form>
                         <div className="w-100 text-center mt-3">
-                            <a href="/signup" style={{ color: '#00bfff' }}>회원가입하기</a>
+                            <a href="/signup" style={{color: '#00bfff'}}>회원가입하기</a>
                         </div>
                         <div className="w-100 text-center mt-3">
                             <Button
@@ -119,6 +123,20 @@ function Login() {
                                 }}
                             >
                                 구글로 로그인
+                            </Button>
+                        </div>
+                        <div className="w-100 text-center mt-3">
+                            <Button
+                                variant="outline-warning"
+                                className="w-100"
+                                onClick={onKakaoLogin}
+                                style={{
+                                    backgroundColor: '#FEE500',
+                                    border: 'none',
+                                    color: '#381E1F',
+                                }}
+                            >
+                                카카오로 로그인
                             </Button>
                         </div>
                         {/* 테스트용 axios 버튼 추가 */}
