@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
 
+
 const Navbar = () => {
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const popupRef = useRef(null);
 
     const togglePopup = () => {
-        setIsPopupOpen(!isPopupOpen);
+        setIsPopupOpen(true);
     }
 
     // 메뉴를 수동으로 닫는 함수임
@@ -71,7 +72,7 @@ const Navbar = () => {
                             <Link className="nav-link" to="/login" onClick={closeMenu}>로그인</Link>
                         </li>
 
-                        {/* 알림 아이콘 */}
+                        {/*알림 아이콘*/}
                         <li className="nav-item">
                             <button className="btn btn-link nav-link" onClick={togglePopup}>
                                 <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
