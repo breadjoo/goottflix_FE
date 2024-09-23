@@ -1,31 +1,32 @@
-import React, { useState, useEffect} from 'react';
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-
-const NotifyPopup = ({ isOpen, popupRef, userId }) => {
+const NotifyPopup = ({ isOpen, popupRef }) => {
     const [notifications, setNotifications] = useState([]);
 
 
 
     useEffect(() => {
-        console.log("isOpen: ", isOpen, "userId: ", userId);
-        if (isOpen && userId) {
-            // 백엔드에서 알림 데이터를 가져오는 API 호출
-
-            axios.get(`/notify/all/${userId}`, {
-                withCredentials: true // 쿠키를 요청에 포함 (필요한 경우)
+        if (isOpen) {
+            axios.get('http://localhost:8080/notify/allnotify', {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true,
             })
                 .then(response => {
-                    setNotifications(response.data); // 알림 데이터를 상태에 저장
+                    setNotifications(response.data);
                 })
                 .catch(error => {
-                    console.error("알림 데이터를 불러오는 중 오류가 발생했습니다.", error);
+                    console.error('Error fetching notifications:', error);
+
                 });
         }
-    }, [isOpen, userId]);
+    }, [isOpen]);
 
 
-    if (!isOpen) return null; // 팝업이 열리지 않았으면 렌더링하지 않음
+
+    if (!isOpen) return null;
 
     return (
         <div className="notification-popup" ref={popupRef}>
@@ -33,12 +34,12 @@ const NotifyPopup = ({ isOpen, popupRef, userId }) => {
                 <h5>알림</h5>
             </div>
             <ul>
+                <li className="notification-item"></li>
                 {notifications.length > 0 ? (
-                    notifications.map((notification, index) => (
-                        <li key={index} className="notification-item">
+                    notifications.map((notify) => (
+                        <li key={notify.id} className="notification-item">
                             <div className="notification-content">
-                                <p>{notification.content}</p>
-                                <span className="notification-time">{notification.timeAgo}</span>
+                                <p>{notify.content}</p>
                             </div>
                         </li>
                     ))

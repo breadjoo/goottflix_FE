@@ -9,9 +9,11 @@ const Navbar = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const popupRef = useRef(null);
 
+
     const togglePopup = () => {
         setIsPopupOpen(true);
     }
+
 
     // 메뉴를 수동으로 닫는 함수임
     const closeMenu = () => {
