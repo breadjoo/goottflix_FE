@@ -25,6 +25,42 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
     }, [isOpen]);
 
 
+    const handleReadNotify = (notifyId, userId) => {
+        axios.put("http://localhost:8080/notify/read", null, {
+            params: {
+                userId : userId,
+                notifyId: notifyId
+            },
+            withCredentials: true,
+        })
+            .then(() => {
+                // 알림을 읽음 처리 후 로컬 상태에서 읽음 여부를 업데이트
+                setNotifications(prevNotifications =>
+                    prevNotifications.map(notification =>
+                        notification.id === notifyId ? { ...notification, isRead: true } : notification
+                    )
+                );
+            })
+            .catch(error => {
+                console.error('알림 업데이트 실패', error);
+            });
+    };
+
+    const handleDeleteNotify = (notifyId) => {
+        axios.delete('http://localhost:8080/notify/deleteNotify', {
+            params: {notifyId},
+            withCredentials: true,
+        })
+            .then(() => {
+                setNotifications(prevNotifications =>
+                    prevNotifications.filter(notification => notification.id !== notifyId)
+                );
+            })
+            .catch(error => {
+                console.error('알림 삭제 실패', error);
+            });
+    };
+
 
     if (!isOpen) return null;
 
@@ -37,10 +73,29 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
                 <li className="notification-item"></li>
                 {notifications.length > 0 ? (
                     notifications.map((notify) => (
-                        <li key={notify.id} className="notification-item">
+                        <li key={notify.id} className="notification-item"
+                            style={{backgroundColor: notify.isRead ? 'white' : '#f0f0f0'}}
+                            onClick={() => handleReadNotify(notify.id, notify.userId)}>
+                            <img
+                                src={notify.notifyType === 'friendAdd'
+                                    ? '/friendnotify.png'
+                                    : '/movienotify.png'
+                                }
+                                alt="icon"
+                                className="notification-icon"
+                            />
                             <div className="notification-content">
-                                <p>{notify.content}</p>
+                                <a href={notify.url}>{notify.content}</a>
                             </div>
+                            <img
+                                src='/deleteicon.png'
+                                alt="삭제 아이콘"
+                                className='delete-icon'
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteNotify(notify.id);
+                                }}
+                            />
                         </li>
                     ))
                 ) : (

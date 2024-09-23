@@ -48,7 +48,7 @@ const Navbar = () => {
             pay_method: "card",
             amount: "10",
             name: "구독",
-            merchant_uid: "ord20240920-000001",
+            merchant_uid: "ord20240920-000021",
         }, function(response){
 
         });
@@ -102,6 +102,7 @@ const Navbar = () => {
 
                             <NotifyPopup isOpen={isPopupOpen} popupRef={popupRef} />
                         </li>
+                    </ul>
                     </ul>
                 </div>
             </div>
