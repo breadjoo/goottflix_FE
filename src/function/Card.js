@@ -5,15 +5,18 @@ import Button from 'react-bootstrap/Button';
 import axios from "axios";
 import "../css/Card.css";
 
-function KitchenSinkExample() {
+function MovieCard() {
     const [movies, setMovies] = useState([]);
     const [ratings, setRatings] = useState({}); // 각 영화별 별점 상태
 
     useEffect(() => {
         const getMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/list');
-                setMovies(response.data);
+                const response = await axios.get('http://localhost:8080/api/list',{
+                    withCredentials: true  // 쿠키 포함
+                });
+
+                setMovies(Array.isArray(response.data) ? response.data : []);
             } catch (err) {
                 alert(err);
             }
@@ -94,4 +97,4 @@ function KitchenSinkExample() {
     );
 }
 
-export default KitchenSinkExample;
+export default MovieCard;

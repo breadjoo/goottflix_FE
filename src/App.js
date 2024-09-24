@@ -5,15 +5,17 @@ import Header from './components/Header';
 import MainContent from './components/MainContent';
 import Footer from './components/Footer';
 import ImageSlider from './components/ImageSlider';
-import KitchenSinkExample from './function/Card';
+import MovieCard from './function/Card';
 import Login from './function/Login';
 import Signup from './function/SignUp';
+import Welcome from "./components/Welcome";
 
 function App() {
     return (
         <Router>
             <div className="App">
                 <Navbar />
+                <Welcome />
                 <Routes>
                     {/* 메인 페이지 */}
                     <Route path="/" element={ <>
@@ -21,7 +23,7 @@ function App() {
                                 <Header />
                                 <div className="container">
                                     <MainContent />
-                                    <KitchenSinkExample />
+                                    <MovieCard />
                                 </div>
                                 <Footer /> </>} />
                     {/* 로그인 페이지 */}
