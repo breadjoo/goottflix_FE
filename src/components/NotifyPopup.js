@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const NotifyPopup = ({ isOpen, popupRef }) => {
+const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     const [notifications, setNotifications] = useState([]);
-
-
 
     useEffect(() => {
         if (isOpen) {
@@ -16,19 +14,19 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
             })
                 .then(response => {
                     setNotifications(response.data);
+                    const unread = response.data.filter(notify => !notify.isRead).length;
+                    setUnreadCount(unread); // Navbar에 unreadCount 업데이트
                 })
                 .catch(error => {
                     console.error('Error fetching notifications:', error);
-
                 });
         }
-    }, [isOpen]);
-
+    }, [isOpen, setUnreadCount]);
 
     const handleReadNotify = (notifyId, userId) => {
         axios.put("http://localhost:8080/notify/read", null, {
             params: {
-                userId : userId,
+                userId: userId,
                 notifyId: notifyId
             },
             withCredentials: true,
@@ -40,6 +38,10 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
                         notification.id === notifyId ? { ...notification, isRead: true } : notification
                     )
                 );
+                // 읽지 않은 알림 수 업데이트
+                setUnreadCount(prevNotifications =>
+                    prevNotifications.filter(notify => !notify.isRead).length
+                );
             })
             .catch(error => {
                 console.error('알림 업데이트 실패', error);
@@ -48,7 +50,7 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
 
     const handleDeleteNotify = (notifyId) => {
         axios.delete('http://localhost:8080/notify/deleteNotify', {
-            params: {notifyId},
+            params: { notifyId },
             withCredentials: true,
         })
             .then(() => {
@@ -61,7 +63,6 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
             });
     };
 
-
     if (!isOpen) return null;
 
     return (
@@ -70,11 +71,10 @@ const NotifyPopup = ({ isOpen, popupRef }) => {
                 <h5>알림</h5>
             </div>
             <ul>
-                <li className="notification-item"></li>
                 {notifications.length > 0 ? (
                     notifications.map((notify) => (
                         <li key={notify.id} className="notification-item"
-                            style={{backgroundColor: notify.isRead ? 'white' : '#f0f0f0'}}
+                            style={{ backgroundColor: notify.isRead ? 'white' : '#f0f0f0' }}
                             onClick={() => handleReadNotify(notify.id, notify.userId)}>
                             <img
                                 src={notify.notifyType === 'friendAdd'

@@ -2,12 +2,14 @@ import React, {useState, useRef, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
+import axios from "axios";
 
 
 const Navbar = () => {
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const popupRef = useRef(null);
+    const [unreadCount, setUnreadCount] = useState(0);
 
 
     const togglePopup = () => {
@@ -39,6 +41,23 @@ const Navbar = () => {
     }, []);
 
 
+    // 알림 개수 가져오기
+    useEffect(() => {
+        axios.get('http://localhost:8080/notify/allnotify', {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        })
+            .then(response => {
+                const unread = response.data.filter(notify => !notify.isRead).length;
+                setUnreadCount(unread); // 읽지 않은 알림 개수 설정
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+    }, []);
+
 
     window.IMP.init("imp77446200");
 
@@ -53,6 +72,8 @@ const Navbar = () => {
 
         });
     };
+
+
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001f3f' }}>
@@ -93,14 +114,30 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/login" onClick={closeMenu}>로그인</Link>
                         </li>
+                        <li className='nav-item'>
+                            <Link className='nav-link' to="/friend" onClick={closeMenu}>친구</Link>
+                        </li>
 
-                        {/*알림 아이콘*/}
+                        {/* 알림 아이콘 */}
                         <li className="nav-item">
-                            <button className="btn btn-link nav-link" onClick={togglePopup}>
+                            <button className="btn btn-link nav-link" onClick={togglePopup} style={{ position: 'relative' }}>
                                 <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
+                                {unreadCount > 0 && (
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '-5px',
+                                        right: '-10px',
+                                        backgroundColor: 'red',
+                                        color: 'white',
+                                        borderRadius: '50%',
+                                        padding: '2px 6px',
+                                        fontSize: '12px',
+                                    }}>
+                                            {unreadCount}
+                                        </span>
+                                )}
                             </button>
-
-                            <NotifyPopup isOpen={isPopupOpen} popupRef={popupRef} />
+                            <NotifyPopup isOpen={isPopupOpen} popupRef={popupRef} setUnreadCount={setUnreadCount} />
                         </li>
                     </ul>
                     </ul>
