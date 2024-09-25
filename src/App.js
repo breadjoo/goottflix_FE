@@ -9,6 +9,7 @@ import MovieCard from './function/Card';
 import Login from './function/Login';
 import Signup from './function/SignUp';
 import Welcome from "./components/Welcome";
+import Description from "./function/Description";
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/description" element={<Description/>}/>
                 </Routes>
             </div>
         </Router>

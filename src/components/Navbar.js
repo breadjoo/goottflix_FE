@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
-import axios from 'axios'; // 백엔드로 API 요청을 보내기 위한 axios
+import axios from "axios";
+
 
 const Navbar = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -54,14 +55,21 @@ const Navbar = () => {
         window.IMP.request_pay({
             pg: "kakaopay",
             pay_method: "card",
-            amount: "10",
+            amount: "9900",
             name: "구독",
-            merchant_uid: "ord20240920-000001",
-        }, function (response) {
-            // 결제 후 처리 로직 추가
+        }, function(response){
+            const {status, err_msg} = response;
+            if(err_msg){
+                alert(err_msg);
+            }
+            if(status==="paid"){
+                alert("구독 결제 완료");
+                subscribe_success();
+            }
+
         });
     };
-
+ 
 // JWT 토큰 쿠키 삭제 함수
     const deleteCookie = (name) => {
         document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.localhost};`;
@@ -83,6 +91,19 @@ const Navbar = () => {
             });
     };
 
+
+    const subscribe_success = async () => {
+        try{
+            await axios.post("http://localhost:8080/api/subscribe",null,{
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true  // 쿠키를 포함하여 요청
+            });
+        }catch (err){
+            alert(err);
+        }
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001f3f' }}>
@@ -112,6 +133,9 @@ const Navbar = () => {
                                 구독
                             </button>
                         </li>
+
+                    </ul>
+                    <ul className="navbar-nav">
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/" onClick={closeMenu}>메인페이지</Link>
                         </li>
@@ -144,6 +168,7 @@ const Navbar = () => {
                             </button>
 
                             <NotifyPopup isOpen={isPopupOpen} popupRef={popupRef} />
+
                         </li>
                     </ul>
                 </div>
