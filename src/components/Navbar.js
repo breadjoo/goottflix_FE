@@ -45,7 +45,7 @@ const Navbar = () => {
             pay_method: "card",
             amount: "10",
             name: "구독",
-            merchant_uid: "ord20240920-000001",
+            merchant_uid: "ord20240923-000001",
         }, function(response){
 
         });
@@ -79,6 +79,7 @@ const Navbar = () => {
                                 구독
                             </button>
                         </li>
+                    </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/"
@@ -88,16 +89,7 @@ const Navbar = () => {
                             <Link className="nav-link" to="/signup" onClick={closeMenu}>회원가입</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/login" onClick={closeMenu}>로그인</Link>
-                        </li>
-
-                        {/* 알림 아이콘 */}
-                        <li className="nav-item">
-                            <button className="btn btn-link nav-link" onClick={togglePopup}>
-                                <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
-                            </button>
-
-                            <NotifyPopup isOpen={isPopupOpen} popupRef={popupRef} />
+                            <Link className="nav-link" to="/login">로그인</Link>
                         </li>
                     </ul>
                 </div>
