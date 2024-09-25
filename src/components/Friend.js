@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // 쿠키를 읽기 위한 라이브러리
-import {jwtDecode} from 'jwt-decode'; // JWT 토큰을 디코딩하기 위한 라이브러리
+import { jwtDecode } from 'jwt-decode'; // JWT 토큰을 디코딩하기 위한 라이브러리
 
-const FriendPage = () => {
+const FriendPopup = ({ isOpen, popupRef }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [friends, setFriends] = useState([]); // 검색 가능한 친구들
     const [filteredFriends, setFilteredFriends] = useState([]);
@@ -67,7 +67,6 @@ const FriendPage = () => {
 
     // 친구 추가 요청 보내기
     const handleAddFriend = async (friendId) => {
-
         try {
             await axios.post('http://localhost:8080/friend/add', null, {
                 params: {
@@ -76,19 +75,26 @@ const FriendPage = () => {
                 withCredentials: true,
             });
             alert("친구 추가 성공!");
+            const addedFriend = friends.find((friend) => friend.id === friendId);
+            setFriendList((prevFriendList) => [...prevFriendList, addedFriend]); // 현재 친구 목록에 추가
         } catch (error) {
             console.error('친구 추가 실패:', error);
-            alert("친구 추가 실패!");
+            alert("이미 추가된 친구 입니다");
         }
     };
 
+    if (!isOpen) return null;
+
     return (
-        <div className="container mt-5">
-            <h1 className="mb-4">친구 관리</h1>
+        <div className="friend-popup" ref={popupRef}>
+            <div className="friend-header">
+                <h5>친구</h5>
+            </div>
 
             {/* 친구 목록 */}
             <div className="mb-5">
-                <h2>내 친구 목록</h2>
+                <h4>모든 친구</h4>
+                <h5> 친구 ({friendList.length}명)</h5>
                 {friendList.length > 0 ? (
                     <ul className="list-group">
                         {friendList.map((friend) => (
@@ -104,7 +110,7 @@ const FriendPage = () => {
 
             {/* 친구 검색 및 추가 */}
             <div className="mb-3">
-                <h2>친구 검색</h2>
+                <h4>친구 검색</h4>
                 <input
                     type="text"
                     value={searchTerm}
@@ -134,4 +140,4 @@ const FriendPage = () => {
     );
 };
 
-export default FriendPage;
+export default FriendPopup;

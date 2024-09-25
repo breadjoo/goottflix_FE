@@ -86,3 +86,52 @@
     cursor: pointer;
     margin-left: 10px;
 }
+
+
+/*밑에는 친구 관리 팝업 스타일*/
+
+/* 팝업 전체 스타일 */
+.friend-popup {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 320px;
+    border: 1px solid #e0e0e0;
+}
+
+/* 제목 스타일 */
+.friend-header h5 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 각 항목 간 간격 */
+.list-group-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* 검색 입력 스타일 */
+.form-control {
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* 친구 추가 버튼 스타일 */
+.btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
