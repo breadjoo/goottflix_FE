@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
+import axios from "axios";
 
 const Navbar = () => {
 
@@ -43,13 +44,33 @@ const Navbar = () => {
         window.IMP.request_pay({
             pg: "kakaopay",
             pay_method: "card",
-            amount: "10",
+            amount: "9900",
             name: "구독",
-            merchant_uid: "ord20240923-000001",
         }, function(response){
+            const {status, err_msg} = response;
+            if(err_msg){
+                alert(err_msg);
+            }
+            if(status==="paid"){
+                alert("구독 결제 완료");
+                subscribe_success();
+            }
 
         });
     };
+
+    const subscribe_success = async () => {
+        try{
+            await axios.post("http://localhost:8080/api/subscribe",null,{
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true  // 쿠키를 포함하여 요청
+            });
+        }catch (err){
+            alert(err);
+        }
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001f3f' }}>
