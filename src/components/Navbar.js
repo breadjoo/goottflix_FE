@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
 import FriendPopup from "./Friend"; // 친구 팝업 컴포넌트 임포트
@@ -12,6 +12,7 @@ const Navbar = () => {
     const notifyPopupRef = useRef(null);
     const friendPopupRef = useRef(null);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [username, setUsername] = useState("");
 
     // 알림 팝업 토글
     const toggleNotifyPopup = () => {
@@ -30,6 +31,14 @@ const Navbar = () => {
         }
         if (friendPopupRef.current && !friendPopupRef.current.contains(event.target)) {
             setIsFriendPopupOpen(false); // 친구 팝업 닫기
+        }
+    };
+
+
+    const closeMenu = () => {
+        const navbar = document.getElementById('navbarNav');
+        if (navbar.classList.contains('show')) {
+            navbar.classList.remove('show');
         }
     };
 
@@ -151,19 +160,6 @@ const Navbar = () => {
                                 구독
                             </button>
                         </li>
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to="/">
-                                    메인페이지
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/signup">회원가입</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">로그인</Link>
-                            </li>
-
                     </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item">
@@ -222,7 +218,6 @@ const Navbar = () => {
                                 {/* FriendPopup 팝업 */}
                                 <FriendPopup isOpen={isFriendPopupOpen} popupRef={friendPopupRef} />
                             </li>
-                        </ul>
                     </ul>
                 </div>
             </div>
