@@ -139,9 +139,7 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/" onClick={closeMenu}>메인페이지</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/signup" onClick={closeMenu}>회원가입</Link>
-                        </li>
+
 
                         {/* 로그인 여부에 따른 버튼 조건부 렌더링 */}
                         {username ? (
@@ -152,9 +150,16 @@ const Navbar = () => {
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link" onClick={handleLogout}>로그아웃</button>
                                 </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/userList" onClick={closeMenu}>관리자페이지</Link>
+                                </li>
+
                             </>
                         ) : (
                             <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/signup" onClick={closeMenu}>회원가입</Link>
+                                </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/login" onClick={closeMenu}>로그인</Link>
                                 </li>
