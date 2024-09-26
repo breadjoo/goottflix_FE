@@ -4,16 +4,21 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import axios from "axios";
 import "../css/Card.css";
+import {useNavigate} from "react-router-dom";
 
-function KitchenSinkExample() {
+function MovieCard() {
+    const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
     const [ratings, setRatings] = useState({}); // 각 영화별 별점 상태
 
     useEffect(() => {
         const getMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/list');
-                setMovies(response.data);
+                const response = await axios.get('http://localhost:8080/api/list',{
+                    withCredentials: true  // 쿠키 포함
+                });
+
+                setMovies(Array.isArray(response.data) ? response.data : []);
             } catch (err) {
                 alert(err);
             }
@@ -52,6 +57,10 @@ function KitchenSinkExample() {
         window.location.reload();
     };
 
+    const movie_Description = async (movie) => {
+        navigate("/description", {state: {movie}});
+    }
+
     return (
         <div className="movie-container">
             {movies.map(movie => (
@@ -84,7 +93,7 @@ function KitchenSinkExample() {
                         </ListGroup>
                         <ListGroup.Item style={{ backgroundColor: '#001f3f', color: 'white' }}>영화 별점 : {movie.rating}</ListGroup.Item>
                         <Card.Body className="d-flex justify-content-between">
-                            <Button variant="outline-light" href="#">영화 상세</Button>
+                            <Button variant="outline-light" onClick={() => movie_Description(movie)}>영화 상세</Button>
                             <Button variant="outline-light" onClick={() => submitRating(movie.id)}>리뷰 달기</Button>
                         </Card.Body>
                     </Card>
@@ -94,4 +103,4 @@ function KitchenSinkExample() {
     );
 }
 
-export default KitchenSinkExample;
+export default MovieCard;
