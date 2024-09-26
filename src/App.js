@@ -8,12 +8,14 @@ import ImageSlider from './components/ImageSlider';
 import KitchenSinkExample from './function/Card';
 import Login from './function/Login';
 import Signup from './function/SignUp';
+import NotificationComponent from "./function/notify";
 
 
 function App() {
     return (
         <Router>
             <div className="App">
+                <NotificationComponent />
                 <Navbar />
                 <Routes>
                     {/* 메인 페이지 */}

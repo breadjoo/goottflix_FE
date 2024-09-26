@@ -23,7 +23,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
         }
     }, []);
 
-    // 백엔드에서 전체 친구 목록 가져오기
+    // 전체 친구 목록 가져오기
     useEffect(() => {
         const fetchFriends = async () => {
             try {
@@ -38,7 +38,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
         fetchFriends();
     }, []);
 
-    // 백엔드에서 친구가 된 사람 목록 가져오기
+    // 친구가 된 사람 목록 가져오기
     useEffect(() => {
         const fetchFriendList = async () => {
             try {
