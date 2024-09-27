@@ -9,13 +9,13 @@ import NotificationComponent from "../function/NotificationComponent";
 
 const Navbar = () => {
     const [username, setUsername] = useState(null); // 사용자 이름 상태
+    const [role, setRole] = useState(null); // 사용자 권한 상태
     const [isNotifyPopupOpen, setIsNotifyPopupOpen] = useState(false);
     const [isFriendPopupOpen, setIsFriendPopupOpen] = useState(false);
     const notifyPopupRef = useRef(null);
     const friendPopupRef = useRef(null);
     const [unreadCount, setUnreadCount] = useState(0);
     const [notifications, setNotifications] = useState([]);
-
 
     // 알림 팝업 토글
     const toggleNotifyPopup = () => {
@@ -69,11 +69,12 @@ const Navbar = () => {
             });
     }, []);
 
-    // 백엔드에서 사용자 이름 가져오기
+    // 백엔드에서 사용자 정보 가져오기 (role 포함)
     useEffect(() => {
         axios.get('http://localhost:8080/api/user', { withCredentials: true })
             .then(response => {
                 setUsername(response.data.username); // 사용자 이름 설정
+                setRole(response.data.role); // 사용자 권한 설정
             })
             .catch(error => {
                 console.error('Failed to fetch user info', error);
@@ -101,12 +102,12 @@ const Navbar = () => {
         });
     };
 
-// JWT 토큰 쿠키 삭제 함수
+    // JWT 토큰 쿠키 삭제 함수
     const deleteCookie = (name) => {
         document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.localhost};`;
     };
 
-// 로그아웃 버튼 클릭 시 처리할 함수
+    // 로그아웃 버튼 클릭 시 처리할 함수
     const handleLogout = () => {
         // JWT 토큰이 저장된 쿠키 삭제
         deleteCookie('Authorization');
@@ -121,7 +122,6 @@ const Navbar = () => {
                 console.error('Logout failed', error);
             });
     };
-
 
     const subscribe_success = async () => {
         try{
@@ -181,10 +181,13 @@ const Navbar = () => {
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link" onClick={handleLogout}>로그아웃</button>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/userList" onClick={closeMenu}>관리자페이지</Link>
-                                </li>
 
+                                {/* 관리자 페이지는 role이 'ROLE_ADMIN'일 때만 표시 */}
+                                {role === 'ROLE_ADMIN' && (
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/adminPage" onClick={closeMenu}>관리자페이지</Link>
+                                    </li>
+                                )}
                             </>
                         ) : (
                             <>
