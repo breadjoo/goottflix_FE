@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // 쿠키를 읽기 위한 라이브러리
 import { jwtDecode } from 'jwt-decode'; // JWT 토큰을 디코딩하기 위한 라이브러리
-import '../css/Friend.css';
+
 
 
 const FriendPopup = ({ isOpen, popupRef }) => {
