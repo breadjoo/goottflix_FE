@@ -6,6 +6,7 @@ import FriendPopup from "./Friend"; // 친구 팝업 컴포넌트 임포트
 import axios from "axios";
 
 
+
 const Navbar = () => {
     const [isNotifyPopupOpen, setIsNotifyPopupOpen] = useState(false);
     const [isFriendPopupOpen, setIsFriendPopupOpen] = useState(false);
