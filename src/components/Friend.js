@@ -3,12 +3,16 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // 쿠키를 읽기 위한 라이브러리
 import { jwtDecode } from 'jwt-decode'; // JWT 토큰을 디코딩하기 위한 라이브러리
 
+
+
 const FriendPopup = ({ isOpen, popupRef }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [friends, setFriends] = useState([]); // 검색 가능한 친구들
     const [filteredFriends, setFilteredFriends] = useState([]);
     const [userId, setUserId] = useState(''); // 현재 로그인된 사용자 ID
     const [friendList, setFriendList] = useState([]); // 친구가 된 사람들 목록
+    const [friendToDelete, setFriendToDelete] = useState(null);
+
 
     // JWT 토큰에서 사용자 ID 가져오기
     useEffect(() => {
@@ -65,6 +69,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
         }
     }, [searchTerm, friends]);
 
+
     // 친구 추가 요청 보내기
     const handleAddFriend = async (friendId) => {
         try {
@@ -83,6 +88,26 @@ const FriendPopup = ({ isOpen, popupRef }) => {
         }
     };
 
+
+    // 친구 삭제 요청 보내기
+    const handleDeleteFriend = async (friendId) => {
+        try {
+            await axios.delete('http://localhost:8080/friend/remove', {
+                params: {
+                    id : friendId// 삭제할 친구의 ID
+                },
+                withCredentials: true,
+            });
+            alert("친구 삭제 성공!");
+            setFriendList((prevFriendList) => prevFriendList.filter(friend => friend.id !== friendId)); // 삭제 후 목록 갱신
+
+        } catch (error) {
+            console.error('친구 삭제 실패:', error);
+            alert("친구 삭제 실패");
+        }
+    };
+
+
     if (!isOpen) return null;
 
     return (
@@ -100,6 +125,33 @@ const FriendPopup = ({ isOpen, popupRef }) => {
                         {friendList.map((friend) => (
                             <li key={friend.id} className="list-group-item">
                                 {friend.username}
+                                {friendToDelete === friend.id ? (
+                                    <>
+                                        <button
+                                            className="btn btn-danger btn-sm"
+                                            onClick={() => handleDeleteFriend(friend.id)}
+                                        >
+                                            삭제
+                                        </button>
+                                        <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => setFriendToDelete(null)} // 취소 버튼
+                                        >
+                                            취소
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        className="btn btn-link btn-sm"
+                                        onClick={() => setFriendToDelete(friend.id)} // X 버튼 누르면 삭제 버튼이 나타남
+                                    >
+                                        <img
+                                            src='/deleteicon.png'
+                                            alt='삭제 아이콘'
+                                            className='delete-icon'
+                                        />
+                                    </button>
+                                )}
                             </li>
                         ))}
                     </ul>
@@ -124,7 +176,8 @@ const FriendPopup = ({ isOpen, popupRef }) => {
             {searchTerm && (
                 <ul className="list-group">
                     {filteredFriends.map((friend) => (
-                        <li key={friend.id} className="list-group-item d-flex justify-content-between align-items-center">
+                        <li key={friend.id}
+                            className="list-group-item d-flex justify-content-between align-items-center">
                             {friend.username}
                             <button
                                 className="btn btn-primary btn-sm"
