@@ -4,6 +4,7 @@ import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
 import FriendPopup from "./Friend"; // 친구 팝업 컴포넌트 임포트
 import axios from "axios";
+import NotificationComponent from "../function/NotificationComponent";
 
 
 const Navbar = () => {
@@ -14,6 +15,7 @@ const Navbar = () => {
     const notifyPopupRef = useRef(null);
     const friendPopupRef = useRef(null);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [notifications, setNotifications] = useState([]);
 
     // 알림 팝업 토글
     const toggleNotifyPopup = () => {
@@ -60,6 +62,7 @@ const Navbar = () => {
             .then(response => {
                 const unread = response.data.filter(notify => !notify.isRead).length;
                 setUnreadCount(unread); // 읽지 않은 알림 개수 설정
+                setNotifications(response.data);
             })
             .catch(error => {
                 console.error('Error fetching notifications:', error);
@@ -197,28 +200,28 @@ const Navbar = () => {
                             </>
                         )}
 
-                        {/* 알림 아이콘 */}
-                        <li className="nav-item">
-                            <button className="btn btn-link nav-link" onClick={toggleNotifyPopup} style={{ position: 'relative' }}>
-                                <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
-                                {unreadCount > 0 && (
-                                    <span style={{
-                                        position: 'absolute',
-                                        top: '-5px',
-                                        right: '-10px',
-                                        backgroundColor: 'red',
-                                        color: 'white',
-                                        borderRadius: '50%',
-                                        padding: '2px 6px',
-                                        fontSize: '12px',
-                                    }}>
+                            {/* 알림 아이콘 */}
+                            <li className="nav-item">
+                                <button className="btn btn-link nav-link" onClick={toggleNotifyPopup} style={{ position: 'relative' }}>
+                                    <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
+                                    {unreadCount > 0 && (
+                                        <span style={{
+                                            position: 'absolute',
+                                            top: '-5px',
+                                            right: '-10px',
+                                            backgroundColor: 'red',
+                                            color: 'white',
+                                            borderRadius: '50%',
+                                            padding: '2px 6px',
+                                            fontSize: '12px',
+                                        }}>
                                             {unreadCount}
                                         </span>
-                                )}
-                            </button>
-                            {/* NotifyPopup 팝업 */}
-                            <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef} setUnreadCount={setUnreadCount} />
-                        </li>
+                                    )}
+                                </button>
+                                {/* NotifyPopup 팝업 */}
+                                <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef} setUnreadCount={setUnreadCount} notifications={notifications} />
+                            </li>
 
                         {/* 친구 관리 아이콘 */}
                         <li className="nav-item">
@@ -231,6 +234,9 @@ const Navbar = () => {
                     </ul>
                 </div>
             </div>
+
+            <NotificationComponent setUnreadCount={setUnreadCount} setNotifications={setNotifications} />
+
         </nav>
     );
 };
