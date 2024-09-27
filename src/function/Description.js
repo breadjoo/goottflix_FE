@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import "../css/Card.css";
 import {useLocation} from "react-router-dom";
+import "../css/Description.css";
 
 function Description() {
     const location = useLocation();
