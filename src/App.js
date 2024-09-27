@@ -9,7 +9,7 @@ import MovieCard from './function/Card';
 import Login from './function/Login';
 import UserProfile from "./function/UserProfile";
 import Signup from './function/SignUp';
-import NotificationComponent from "./function/notify";
+import NotificationComponent from "./function/NotificationComponent";
 
 import Welcome from "./components/Welcome";
 import Description from "./function/Description";
