@@ -21,6 +21,14 @@ const Navbar = () => {
         setIsNotifyPopupOpen(!isNotifyPopupOpen);
     };
 
+    // 메뉴를 수동으로 닫는 함수임
+    const closeMenu = () => {
+        const navbar = document.getElementById('navbarNav');
+        if (navbar.classList.contains('show')) {
+            navbar.classList.remove('show');
+        }
+    };
+
     // 친구 관리 팝업 토글
     const toggleFriendPopup = () => {
         setIsFriendPopupOpen(!isFriendPopupOpen);
@@ -154,23 +162,12 @@ const Navbar = () => {
                                 구독
                             </button>
                         </li>
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to="/">
-                                    메인페이지
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/signup">회원가입</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">로그인</Link>
-                            </li>
 
                     </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link className="nav-link active" aria-current="page" to="/" onClick={closeMenu}>메인페이지</Link>
+                            <Link className="nav-link active" aria-current="page" to="/"
+                                  onClick={closeMenu}>메인페이지</Link>
                         </li>
 
                         {/* 로그인 여부에 따른 버튼 조건부 렌더링 */}
@@ -198,38 +195,39 @@ const Navbar = () => {
                             </>
                         )}
 
-                            {/* 알림 아이콘 */}
-                            <li className="nav-item">
-                                <button className="btn btn-link nav-link" onClick={toggleNotifyPopup} style={{ position: 'relative' }}>
-                                    <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
-                                    {unreadCount > 0 && (
-                                        <span style={{
-                                            position: 'absolute',
-                                            top: '-5px',
-                                            right: '-10px',
-                                            backgroundColor: 'red',
-                                            color: 'white',
-                                            borderRadius: '50%',
-                                            padding: '2px 6px',
-                                            fontSize: '12px',
-                                        }}>
+                        {/* 알림 아이콘 */}
+                        <li className="nav-item">
+                            <button className="btn btn-link nav-link" onClick={toggleNotifyPopup}
+                                    style={{position: 'relative'}}>
+                                <img src="/notify.png" alt="알림 아이콘" style={{width: '24px'}}/>
+                                {unreadCount > 0 && (
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '-5px',
+                                        right: '-10px',
+                                        backgroundColor: 'red',
+                                        color: 'white',
+                                        borderRadius: '50%',
+                                        padding: '2px 6px',
+                                        fontSize: '12px',
+                                    }}>
                                             {unreadCount}
                                         </span>
-                                    )}
-                                </button>
-                                {/* NotifyPopup 팝업 */}
-                                <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef} setUnreadCount={setUnreadCount} />
-                            </li>
+                                )}
+                            </button>
+                            {/* NotifyPopup 팝업 */}
+                            <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef}
+                                         setUnreadCount={setUnreadCount}/>
+                        </li>
 
-                            {/* 친구 관리 아이콘 */}
-                            <li className="nav-item">
-                                <button className="btn btn-link nav-link" onClick={toggleFriendPopup}>
-                                    <img src="/friends.png" alt="친구 아이콘" style={{ width: '24px' }} />
-                                </button>
-                                {/* FriendPopup 팝업 */}
-                                <FriendPopup isOpen={isFriendPopupOpen} popupRef={friendPopupRef} />
-                            </li>
-                        </ul>
+                        {/* 친구 관리 아이콘 */}
+                        <li className="nav-item">
+                            <button className="btn btn-link nav-link" onClick={toggleFriendPopup}>
+                                <img src="/friends.png" alt="친구 아이콘" style={{width: '24px'}}/>
+                            </button>
+                            {/* FriendPopup 팝업 */}
+                            <FriendPopup isOpen={isFriendPopupOpen} popupRef={friendPopupRef}/>
+                        </li>
                     </ul>
                 </div>
             </div>
