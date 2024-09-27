@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     const [notifications, setNotifications] = useState([]);
+    const [localUrl, setLocalUrl] = useState("http://localhost8080/")
 
     useEffect(() => {
         if (isOpen) {

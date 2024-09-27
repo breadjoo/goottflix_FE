@@ -15,6 +15,9 @@ import Welcome from "./components/Welcome";
 import Description from "./function/Description";
 import EditProfile from "./function/EditProfile";
 import UserList from "./function/UserList";
+import MovieWrite from "./function/MovieWrite";
+import MovieListAdmin from "./function/MovieListAdmin";
+import AdminPage from "./function/AdminPage";
 
 function App() {
     return (
@@ -37,7 +40,10 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/mypage" element={<UserProfile />} />
                     <Route path="/editProfile" element={<EditProfile />} />
+                    <Route path="/adminPage" element={<AdminPage />} />
                     <Route path="/userList" element={<UserList />} />
+                    <Route path="/movieWrite" element={<MovieWrite />} />
+                    <Route path="/movieListAdmin" element={<MovieListAdmin />} />
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
