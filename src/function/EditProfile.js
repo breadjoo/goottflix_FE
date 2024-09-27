@@ -1,44 +1,62 @@
-import React, { useState } from 'react';
-import { Form, Button, Container, Card } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-function Signup() {
-    const [formData, setFormData] = useState({
-        loginId: '', // loginId 추가
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+const EditUserProfile = () => {
+    const [profile, setProfile] = useState({
         username: '',
         email: '',
-        password: '',
         birth: '',
-        gender: 'M' // 기본값 설정
+        gender: '',
+        role: '',
+        subscribe: ''
     });
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/user/profile', {
+                    withCredentials: true
+                });
+                setProfile(response.data);
+            } catch (err) {
+                setError('Failed to load user profile.');
+            }
+        };
+
+        fetchProfile();
+    }, []);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        setProfile(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/api/join', formData)
-            .then((response) => {
-                alert('회원가입 성공');
-                window.location.href = '/login';
+        axios.post('http://localhost:8080/user/profile/update', profile, {
+            withCredentials: true
+        })
+            .then(() => {
+                alert('Profile updated successfully!');
             })
-            .catch((error) => {
-                console.error('회원가입 실패:', error);
-                alert('회원가입 실패');
+            .catch((err) => {
+                console.error('정보 수정 실패:', err);
+                alert('정보 수정 실패');
             });
     };
+
 
     return (
         <Container
             className="d-flex justify-content-center align-items-center"
             style={{
                 minHeight: '100vh',
-                minWidth : '200vh',
+                minWidth: '200vh',
                 background: 'linear-gradient(to bottom, #000000, #001f3f)', // 그라데이션 적용
             }}
         >
@@ -50,25 +68,14 @@ function Signup() {
             >
                 <Card style={{ width: '400px', backgroundColor: '#001f3f', color: 'white' }}>
                     <Card.Body>
-                        <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>회원가입</h2>
+                        <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>프로필 수정</h2>
                         <Form onSubmit={handleSubmit}>
-                            <Form.Group id="loginId" className="mb-3">
-                                <Form.Label>로그인 ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="loginId"
-                                    value={formData.loginId}
-                                    onChange={handleChange}
-                                    required
-                                    style={{ backgroundColor: '#000', color: 'white' }}
-                                />
-                            </Form.Group>
                             <Form.Group id="username" className="mb-3">
-                                <Form.Label>사용자 이름</Form.Label>
+                                <Form.Label>이름</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="username"
-                                    value={formData.username}
+                                    value={profile.username}
                                     onChange={handleChange}
                                     required
                                     style={{ backgroundColor: '#000', color: 'white' }}
@@ -79,18 +86,7 @@ function Signup() {
                                 <Form.Control
                                     type="email"
                                     name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    style={{ backgroundColor: '#000', color: 'white' }}
-                                />
-                            </Form.Group>
-                            <Form.Group id="password" className="mb-3">
-                                <Form.Label>비밀번호</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password"
-                                    value={formData.password}
+                                    value={profile.email}
                                     onChange={handleChange}
                                     required
                                     style={{ backgroundColor: '#000', color: 'white' }}
@@ -101,7 +97,7 @@ function Signup() {
                                 <Form.Control
                                     type="date"
                                     name="birth"
-                                    value={formData.birth}
+                                    value={profile.birth}
                                     onChange={handleChange}
                                     required
                                     style={{ backgroundColor: '#000', color: 'white' }}
@@ -112,7 +108,7 @@ function Signup() {
                                 <Form.Control
                                     as="select"
                                     name="gender"
-                                    value={formData.gender}
+                                    value={profile.gender}
                                     onChange={handleChange}
                                     required
                                     style={{ backgroundColor: '#000', color: 'white' }}
@@ -121,18 +117,27 @@ function Signup() {
                                     <option value="F">여성</option>
                                 </Form.Control>
                             </Form.Group>
+                            <Form.Group id="subscribe" className="mb-3">
+                                <Form.Label>구독 상태</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="subscribe"
+                                    value={profile.subscribe}
+                                    onChange={handleChange}
+                                    readOnly
+                                    style={{ backgroundColor: '#000', color: 'white' }}
+                                />
+                            </Form.Group>
                             <Button variant="outline-light" type="submit" className="w-100 mt-3">
-                                회원가입
+                                프로필 업데이트
                             </Button>
                         </Form>
-                        <div className="w-100 text-center mt-3">
-                            <a href="/login" style={{ color: '#00bfff' }}>이미 계정이 있나요? 로그인</a>
-                        </div>
                     </Card.Body>
                 </Card>
             </div>
         </Container>
     );
-}
+};
 
-export default Signup;
+
+export default EditUserProfile;
