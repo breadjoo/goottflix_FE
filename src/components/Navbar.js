@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
 import axios from "axios";
@@ -9,7 +9,6 @@ const Navbar = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const popupRef = useRef(null);
     const [username, setUsername] = useState(null); // 사용자 이름 상태
-    const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
