@@ -94,7 +94,7 @@ function MovieCard() {
                         <ListGroup.Item style={{ backgroundColor: '#001f3f', color: 'white' }}>영화 별점 : {movie.rating}</ListGroup.Item>
                         <Card.Body className="d-flex justify-content-between">
                             <Button variant="outline-light" onClick={() => movie_Description(movie)}>영화 상세</Button>
-                            <Button variant="outline-light" onClick={() => submitRating(movie.id)}>리뷰 달기</Button>
+                            <Button variant="outline-light" onClick={() => submitRating(movie.id)}>별점 주기</Button>
                         </Card.Body>
                     </Card>
                 </div>

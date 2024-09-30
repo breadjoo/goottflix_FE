@@ -101,10 +101,10 @@ function Description() {
                 <div className="read_Review">
                     {reviews.map((re, index) => (
                         <div key={index} style={{border:"1px solid black", padding: "10px", margin: "10px"}}>
-                            <p>아이디 : {re.userId}</p>
-                            <p>별점 : {re.rating}</p>
-                            <p>리뷰내용 : {re.review}</p>
-                            <p>추천수 : {re.recommend}</p>
+                            <p>아이디 : {re.nickname}</p>
+                            <p>별점 : {re.review.rating}</p>
+                            <p>리뷰내용 : {re.review.review}</p>
+                            <p>추천수 : {re.review.recommend}</p>
                         </div>
                     ))}
                 </div>
