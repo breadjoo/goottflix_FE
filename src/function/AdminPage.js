@@ -68,6 +68,16 @@ const AdminPage = () => {
                         영화알림보내기
                     </Button>
                 </Col>
+                <Col md={3}>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={() => navigate('/nfcData')}
+                        style={{ backgroundColor: '#001f3f', borderColor: '#001f3f', width: '100%' }}
+                    >
+                        NFC 확인
+                    </Button>
+                </Col>
             </Row>
         </Container>
     );

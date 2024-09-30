@@ -18,6 +18,7 @@ import UserList from "./function/UserList";
 import MovieWrite from "./function/MovieWrite";
 import MovieListAdmin from "./function/MovieListAdmin";
 import AdminPage from "./function/AdminPage";
+import NfcData from "./function/NfcData";
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
                     <Route path="/userList" element={<UserList />} />
                     <Route path="/movieWrite" element={<MovieWrite />} />
                     <Route path="/movieListAdmin" element={<MovieListAdmin />} />
+                    <Route path="/nfcData" element={<NfcData />} />
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
