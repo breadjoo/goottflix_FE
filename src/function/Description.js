@@ -56,6 +56,22 @@ function Description() {
         window.location.reload();
     };
 
+    const recommendReview = async (userId) =>{
+        try{
+            await axios.post('http://localhost:8080/api/recommendUp', null,{
+                params:{userId},
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true  // 쿠키를 포함하여 요청
+            });
+            alert('리뷰 추천');
+        }catch (err){
+            alert('리뷰 추천 실패'+err);
+        }
+        window.location.reload();
+    }
+
     return (
         <div>
             <img
@@ -105,6 +121,8 @@ function Description() {
                             <p>별점 : {re.review.rating}</p>
                             <p>리뷰내용 : {re.review.review}</p>
                             <p>추천수 : {re.review.recommend}</p>
+                            <button onClick={() => recommendReview(re.review.id)}
+                                    style={{backgroundColor:"transparent", border:"none", fontSize:"14px"}}>추천하기</button>
                         </div>
                     ))}
                 </div>

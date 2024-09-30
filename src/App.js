@@ -18,6 +18,7 @@ import UserList from "./function/UserList";
 import MovieWrite from "./function/MovieWrite";
 import MovieListAdmin from "./function/MovieListAdmin";
 import AdminPage from "./function/AdminPage";
+import RecommendedCard from "./function/RecommendedCard";
 import NfcData from "./function/NfcData";
 
 function App() {
@@ -49,6 +50,14 @@ function App() {
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
+                    <Route path="/recommendedCard" element={ <>
+                        <ImageSlider />
+                        <Header />
+                        <div className="container">
+                            <MainContent />
+                            <RecommendedCard />
+                        </div>
+                        <Footer /> </>}/>
                 </Routes>
             </div>
         </Router>
