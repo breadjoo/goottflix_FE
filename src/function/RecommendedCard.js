@@ -14,7 +14,7 @@ function RecommendedCard() {
     useEffect(() => {
         const getMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/recommendedList', null, {
+                const response = await axios.get('http://localhost:8080/api/recommendedList', {
                     headers: {
                         'Content-Type': 'application/json'
                     },
