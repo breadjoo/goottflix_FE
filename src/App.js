@@ -16,6 +16,10 @@ import Description from "./function/Description";
 import EditProfile from "./function/EditProfile";
 import UserList from "./function/UserList";
 
+import ChatRoomList from './components/ChatRoomList';
+import ChatRoom from './components/ChatRoom';
+
+
 function App() {
     return (
         <Router>
@@ -41,6 +45,9 @@ function App() {
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
+                    {/*채팅*/}
+                    <Route path="/chatroom" element={<ChatRoomList />} />
+                    <Route path="/chat/:roomId" element={<ChatRoom />} />
                 </Routes>
             </div>
         </Router>

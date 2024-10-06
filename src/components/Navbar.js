@@ -165,6 +165,11 @@ const Navbar = () => {
                             </button>
                         </li>
 
+                        {/* "채팅" 버튼 추가 */}
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/chatroom" onClick={closeMenu}>채팅</Link>
+                        </li>
+
                     </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item">
@@ -197,28 +202,30 @@ const Navbar = () => {
                             </>
                         )}
 
-                            {/* 알림 아이콘 */}
-                            <li className="nav-item">
-                                <button className="btn btn-link nav-link" onClick={toggleNotifyPopup} style={{ position: 'relative' }}>
-                                    <img src="/notify.png" alt="알림 아이콘" style={{ width: '24px' }} />
-                                    {unreadCount > 0 && (
-                                        <span style={{
-                                            position: 'absolute',
-                                            top: '-5px',
-                                            right: '-10px',
-                                            backgroundColor: 'red',
-                                            color: 'white',
-                                            borderRadius: '50%',
-                                            padding: '2px 6px',
-                                            fontSize: '12px',
-                                        }}>
+                        {/* 알림 아이콘 */}
+                        <li className="nav-item">
+                            <button className="btn btn-link nav-link" onClick={toggleNotifyPopup}
+                                    style={{position: 'relative'}}>
+                                <img src="/notify.png" alt="알림 아이콘" style={{width: '24px'}}/>
+                                {unreadCount > 0 && (
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '-5px',
+                                        right: '-10px',
+                                        backgroundColor: 'red',
+                                        color: 'white',
+                                        borderRadius: '50%',
+                                        padding: '2px 6px',
+                                        fontSize: '12px',
+                                    }}>
                                             {unreadCount}
                                         </span>
-                                    )}
-                                </button>
-                                {/* NotifyPopup 팝업 */}
-                                <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef} setUnreadCount={setUnreadCount} notifications={notifications} />
-                            </li>
+                                )}
+                            </button>
+                            {/* NotifyPopup 팝업 */}
+                            <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef}
+                                         setUnreadCount={setUnreadCount} notifications={notifications}/>
+                        </li>
 
                         {/* 친구 관리 아이콘 */}
                         <li className="nav-item">
@@ -232,7 +239,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-            <NotificationComponent setUnreadCount={setUnreadCount} setNotifications={setNotifications} />
+            <NotificationComponent setUnreadCount={setUnreadCount} setNotifications={setNotifications}/>
 
         </nav>
     );
