@@ -15,6 +15,12 @@ import Welcome from "./components/Welcome";
 import Description from "./function/Description";
 import EditProfile from "./function/EditProfile";
 import UserList from "./function/UserList";
+import MovieWrite from "./function/MovieWrite";
+import MovieListAdmin from "./function/MovieListAdmin";
+import AdminPage from "./function/AdminPage";
+import RecommendedCard from "./function/RecommendedCard";
+import NfcData from "./function/NfcData";
+import ResetPassword from "./function/ResetPassword";
 
 import ChatRoomList from './components/ChatRoomList';
 import ChatRoom from './components/ChatRoom';
@@ -41,10 +47,15 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/mypage" element={<UserProfile />} />
                     <Route path="/editProfile" element={<EditProfile />} />
+                    <Route path="/adminPage" element={<AdminPage />} />
                     <Route path="/userList" element={<UserList />} />
+                    <Route path="/movieWrite" element={<MovieWrite />} />
+                    <Route path="/movieListAdmin" element={<MovieListAdmin />} />
+                    <Route path="/nfcData" element={<NfcData />} />
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
+                    <Route path="/auth/reset" element={<ResetPassword />} />
                     {/*채팅*/}
                     <Route path="/chatroom" element={<ChatRoomList />} />
                     <Route path="/chat/:roomId" element={<ChatRoom />} />

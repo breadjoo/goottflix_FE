@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Container, Card, Button, Form } from 'react-bootstrap';
+
 const EditUserProfile = () => {
     const [profile, setProfile] = useState({
         username: '',
-        email: '',
         birth: '',
         gender: '',
         role: '',
         subscribe: ''
     });
     const [error, setError] = useState('');
+    const [usernameCheckMessage, setUsernameCheckMessage] = useState(''); // 중복 확인 메시지
+    const [isUsernameChecked, setIsUsernameChecked] = useState(false); // 중복 확인 여부
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -33,10 +35,31 @@ const EditUserProfile = () => {
             ...prevState,
             [name]: value
         }));
+        setIsUsernameChecked(false); // 별명이 바뀌면 중복 확인을 다시 하도록 설정
+    };
+
+    // 사용자 별명 중복 확인 함수
+    const checkUsername = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/user/username/check', null, {
+                withCredentials: true,
+                params: { username: profile.username }
+            });
+            setUsernameCheckMessage('사용 가능한 별명입니다.');
+            setIsUsernameChecked(true);
+        } catch (error) {
+            setUsernameCheckMessage('이미 존재하는 별명입니다.');
+            setIsUsernameChecked(false);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!isUsernameChecked) {
+            alert('별명 중복 확인을 해주세요.');
+            return;
+        }
 
         axios.post('http://localhost:8080/user/profile/update', profile, {
             withCredentials: true
@@ -49,7 +72,6 @@ const EditUserProfile = () => {
                 alert('정보 수정 실패');
             });
     };
-
 
     return (
         <Container
@@ -71,27 +93,31 @@ const EditUserProfile = () => {
                         <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>프로필 수정</h2>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group id="username" className="mb-3">
-                                <Form.Label>이름</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="username"
-                                    value={profile.username}
-                                    onChange={handleChange}
-                                    required
-                                    style={{ backgroundColor: '#000', color: 'white' }}
-                                />
+                                <Form.Label>별명</Form.Label>
+                                <div className="d-flex">
+                                    <Form.Control
+                                        type="text"
+                                        name="username"
+                                        value={profile.username}
+                                        onChange={handleChange}
+                                        required
+                                        style={{ backgroundColor: '#000', color: 'white' }}
+                                    />
+                                    <Button
+                                        variant="outline-light"
+                                        className="ms-2"
+                                        onClick={checkUsername}
+                                    >
+                                        중복 확인
+                                    </Button>
+                                </div>
+                                {usernameCheckMessage && (
+                                    <p style={{ color: usernameCheckMessage === '사용 가능한 별명입니다.' ? 'green' : 'red' }}>
+                                        {usernameCheckMessage}
+                                    </p>
+                                )}
                             </Form.Group>
-                            <Form.Group id="email" className="mb-3">
-                                <Form.Label>이메일</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    value={profile.email}
-                                    onChange={handleChange}
-                                    required
-                                    style={{ backgroundColor: '#000', color: 'white' }}
-                                />
-                            </Form.Group>
+
                             <Form.Group id="birth" className="mb-3">
                                 <Form.Label>생년월일</Form.Label>
                                 <Form.Control
@@ -138,6 +164,5 @@ const EditUserProfile = () => {
         </Container>
     );
 };
-
 
 export default EditUserProfile;

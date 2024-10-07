@@ -6,7 +6,7 @@ import axios from "axios";
 import "../css/Card.css";
 import {useNavigate} from "react-router-dom";
 
-function MovieCard() {
+function RecommendedCard() {
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
     const [ratings, setRatings] = useState({}); // 각 영화별 별점 상태
@@ -14,8 +14,11 @@ function MovieCard() {
     useEffect(() => {
         const getMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/list',{
-                    withCredentials: true  // 쿠키 포함
+                const response = await axios.get('http://localhost:8080/api/recommendedList', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true  // 쿠키를 포함하여 요청
                 });
 
                 setMovies(Array.isArray(response.data) ? response.data : []);
@@ -103,4 +106,4 @@ function MovieCard() {
     );
 }
 
-export default MovieCard;
+export default RecommendedCard;
