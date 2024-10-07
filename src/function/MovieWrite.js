@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const MovieWrite = () => {
   const [formData, setFormData] = useState({
@@ -9,8 +11,32 @@ const MovieWrite = () => {
     releaseDate: '',
     genre: '',
     director: '',
-    file: null
+    file: null,
   });
+  const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태
+  const navigate = useNavigate();
+
+  // 사용자 정보 가져와서 role 확인
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+        const { role } = response.data; // 사용자 role 정보 확인
+        if (role === 'ROLE_ADMIN') {
+          setIsAuthorized(true);  // 권한이 있으면 true로 설정
+        } else {
+          alert('접근 권한이 없습니다.');
+          navigate('/');  // 권한이 없으면 메인 페이지로 리디렉션
+        }
+      } catch (err) {
+        console.error('Failed to fetch user info', err);
+        alert('로그인이 필요합니다.');
+        navigate('/login');  // 로그인 정보가 없으면 로그인 페이지로 리디렉션
+      }
+    };
+
+    fetchUserInfo();  // 컴포넌트 마운트 시 사용자 정보 확인
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -32,12 +58,10 @@ const MovieWrite = () => {
       body: data,
     })
         .then((response) => {
-          // 응답의 상태 코드를 먼저 확인
           if (!response.ok) {
             throw new Error('서버 응답에 문제가 있습니다.');
           }
 
-          // 응답이 JSON일 때만 처리
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
             return response.json(); // JSON 응답 처리
@@ -46,12 +70,10 @@ const MovieWrite = () => {
           }
         })
         .then((data) => {
-          // 서버 응답이 JSON일 때 처리
           if (typeof data === 'object') {
             console.log('Success:', data);
             alert('영화 작성이 성공적으로 처리되었습니다!');
           } else {
-            // 서버 응답이 텍스트인 경우에도 처리
             console.log('Success (Text):', data);
             alert('영화 작성이 성공적으로 처리되었습니다!');
           }
@@ -62,6 +84,11 @@ const MovieWrite = () => {
           alert('오류가 발생했습니다. 다시 시도해주세요.');
         });
   };
+
+  if (!isAuthorized) {
+    return <div>권한을 확인 중입니다...</div>;  // 권한 확인 중일 때 로딩 메시지
+  }
+
   return (
       <Container className="mt-5" style={{ maxWidth: '500px' }}>
         <h2 className="text-center" style={{ color: '#001f3f' }}>영화 작성</h2>

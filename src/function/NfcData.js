@@ -1,31 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const NfcData = () => {
     const [uid, setUid] = useState('');  // NFC로부터 받은 UID
     const [messages, setMessages] = useState([]);  // 메시지 목록
     const [mode, setMode] = useState('register');  // 초기 모드는 'register'
     const [bookInfo, setBookInfo] = useState(null);  // BookInfo 데이터를 저장할 상태
+    const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태
+    const navigate = useNavigate();  // 리디렉션을 위해 useNavigate 사용
+
+    // 사용자 정보 가져와서 role 확인
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const { role } = response.data; // 사용자 role 정보 확인
+                if (role === 'ROLE_ADMIN') {
+                    setIsAuthorized(true);  // 권한이 있으면 true로 설정
+                } else {
+                    alert('접근 권한이 없습니다.');
+                    navigate('/');  // 권한이 없으면 메인 페이지로 리디렉션
+                }
+            } catch (err) {
+                console.error('Failed to fetch user info', err);
+                alert('로그인이 필요합니다.');
+                navigate('/login');  // 로그인 정보가 없으면 로그인 페이지로 리디렉션
+            }
+        };
+
+        fetchUserInfo();  // 컴포넌트 마운트 시 사용자 정보 확인
+    }, [navigate]);
 
     // NFC UID 수신
     useEffect(() => {
-        const eventSource = new EventSource('http://localhost:8080/book/nfc-data', {
-            withCredentials: true
-        });
+        if (isAuthorized) {  // 관리자 권한이 있을 때만 NFC 데이터를 받아옴
+            const eventSource = new EventSource('http://localhost:8080/book/nfc-data', {
+                withCredentials: true
+            });
 
-        eventSource.onmessage = (event) => {
-            setMessages((prevMessages) => [...prevMessages, event.data]);
-            setUid(event.data);  // UID 저장
-        };
+            eventSource.onmessage = (event) => {
+                setMessages((prevMessages) => [...prevMessages, event.data]);
+                setUid(event.data);  // UID 저장
+            };
 
-        return () => {
-            eventSource.close();
-        };
-    }, []);
+            return () => {
+                eventSource.close();
+            };
+        }
+    }, [isAuthorized]);
 
     // POST 요청을 통해 UID와 모드를 전송
     const sendUidToBackend = () => {
-        const url ='http://localhost:8080/book/process-card';
+        const url = 'http://localhost:8080/book/process-card';
         axios.post(url, { uid, mode }, {
             withCredentials: true
         })
@@ -44,11 +71,14 @@ const NfcData = () => {
             });
     };
 
+    if (!isAuthorized) {
+        return <div>권한을 확인 중입니다...</div>;  // 권한 확인 중일 때 로딩 메시지
+    }
+
     return (
         <div className="container mt-5">
             <h1 className="text-center mb-4">NFC Card Operation</h1>
 
-            {/* 메시지 목록 */}
             {messages.length > 0 && (
                 <ul className="list-group mb-3">
                     <h3>NFC 카드정보</h3>

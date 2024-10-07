@@ -19,6 +19,7 @@ import MovieWrite from "./function/MovieWrite";
 import MovieListAdmin from "./function/MovieListAdmin";
 import AdminPage from "./function/AdminPage";
 import NfcData from "./function/NfcData";
+import ResetPassword from "./function/ResetPassword";
 
 function App() {
     return (
@@ -49,6 +50,7 @@ function App() {
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
+                    <Route path="/auth/reset" element={<ResetPassword />} />
                 </Routes>
             </div>
         </Router>

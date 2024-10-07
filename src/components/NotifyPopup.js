@@ -79,7 +79,7 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
                             style={{ backgroundColor: notify.isRead ? 'white' : '#f0f0f0' }}
                             onClick={() => handleReadNotify(notify.id, notify.userId)}>
                             <img
-                                src={notify.notifyType === 'friendAdd'
+                                src={notify.notifyType === 'friendadd'
                                     ? '/addfriendicon.png'
                                     : '/movienotify.png'
                                 }
