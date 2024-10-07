@@ -18,6 +18,7 @@ import UserList from "./function/UserList";
 import MovieWrite from "./function/MovieWrite";
 import MovieListAdmin from "./function/MovieListAdmin";
 import AdminPage from "./function/AdminPage";
+import RecommendedCard from "./function/RecommendedCard";
 import NfcData from "./function/NfcData";
 import ResetPassword from "./function/ResetPassword";
 
@@ -30,7 +31,7 @@ function App() {
                 <Welcome />
                 <Routes>
                     {/* 메인 페이지 */}
-                    <Route path="/" element={ <>
+                    <Route path="/recommendedCard" element={ <>
                                 <ImageSlider />
                                 <Header />
                                 <div className="container">

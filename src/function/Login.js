@@ -77,7 +77,9 @@ function Login() {
             className="d-flex justify-content-center align-items-center"
             style={{
                 minHeight: '100vh',
-                minWidth: '200vh',
+                minWidth : '100vw',
+                margin : 0,
+                padding : 0,
                 background: 'linear-gradient(to bottom, #000000, #001f3f)', // 그라데이션 적용
             }}
         >
