@@ -10,8 +10,18 @@ function ChatRoom() {
     const [stompClient, setStompClient] = useState(null);
     const [messageInput, setMessageInput] = useState('');
     const [sender, setSender] = useState('');
+    const [roomName, setRoomName] = useState('');
 
     useEffect(() => {
+
+        axios.get(`http://localhost:8080/api/chatroom/${roomId}/name`)
+            .then(response => {
+                setRoomName(response.data);
+            })
+            .catch(error => {
+                console.log("채팅방 이름을 가져오는데 실패함", error);
+            });
+
 
         axios.get("http://localhost:8080/api/chatroom/getusername", { withCredentials: true })
             .then(response => {
@@ -85,7 +95,7 @@ function ChatRoom() {
 
     return (
         <div>
-            <h2>채팅방 {roomId}</h2>
+            <h2>{roomName}</h2>
             <div>
                 {messages.map(msg => (
                     <div key={msg.id}>

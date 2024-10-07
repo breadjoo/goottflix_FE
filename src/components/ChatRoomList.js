@@ -6,7 +6,7 @@ function ChatRoomList({setSelectedRoomId}) {
     const [chatRooms, setChatRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
 
-    // 여기서 useEffect 함수가 시작됩니다.
+
     useEffect(() => {
         axios.get('http://localhost:8080/api/chatroom')
             .then(response => {
@@ -15,7 +15,7 @@ function ChatRoomList({setSelectedRoomId}) {
             .catch(error => {
                 console.error('Error fetching chat rooms:', error);
             });
-    }, []);  // useEffect 함수 닫는 중괄호를 올바른 위치로 이동
+    }, []);
 
 
 
