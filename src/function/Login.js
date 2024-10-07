@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Card } from 'react-bootstrap';
+import { Form, Button, Container, Card, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 function Login() {
@@ -7,6 +7,9 @@ function Login() {
         loginId: '',
         password: ''
     });
+
+    const [showForgotModal, setShowForgotModal] = useState(false); // 모달 상태
+    const [email, setEmail] = useState(''); // 이메일 입력 상태
 
     const handleChange = (e) => {
         setFormData({
@@ -55,12 +58,26 @@ function Login() {
             .catch((error) => alert(error));
     };
 
+    const handleForgotPassword = () => {
+        axios.post('http://localhost:8080/auth/forgot', null, {
+            params: { email }, // email 파라미터를 params로 전달
+        })
+            .then((response) => {
+                alert('비밀번호 초기화를 위한 메일이 발송되었습니다.');
+                setShowForgotModal(false);
+            })
+            .catch((error) => {
+                console.error('에러:', error);
+                alert('존재하지 않는 이메일입니다.');
+            });
+    };
+
     return (
         <Container
             className="d-flex justify-content-center align-items-center"
             style={{
                 minHeight: '100vh',
-                minWidth : '10ㅊㅇ0vw',
+                minWidth : '100vw',
                 margin : 0,
                 padding : 0,
                 background: 'linear-gradient(to bottom, #000000, #001f3f)', // 그라데이션 적용
@@ -69,7 +86,7 @@ function Login() {
             <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh', width: '100vw' }}>
                 <Card style={{ width: '400px', backgroundColor: '#001f3f', color: 'white' }}>
                     <Card.Body>
-                        <h2 className="text-center mb-4" style={{color: '#00bfff'}}>로그인</h2>
+                        <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>로그인</h2>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group id="loginId" className="mb-3">
                                 <Form.Label>로그인 ID</Form.Label>
@@ -79,7 +96,7 @@ function Login() {
                                     value={formData.loginId}
                                     onChange={handleChange}
                                     required
-                                    style={{backgroundColor: '#000', color: 'white'}}
+                                    style={{ backgroundColor: '#000', color: 'white' }}
                                 />
                             </Form.Group>
                             <Form.Group id="password" className="mb-3">
@@ -90,7 +107,7 @@ function Login() {
                                     value={formData.password}
                                     onChange={handleChange}
                                     required
-                                    style={{backgroundColor: '#000', color: 'white'}}
+                                    style={{ backgroundColor: '#000', color: 'white' }}
                                 />
                             </Form.Group>
                             <Button variant="outline-light" type="submit" className="w-100 mt-3">
@@ -98,7 +115,7 @@ function Login() {
                             </Button>
                         </Form>
                         <div className="w-100 text-center mt-3">
-                            <a href="/signup" style={{color: '#00bfff'}}>회원가입하기</a>
+                            <a href="/signup" style={{ color: '#00bfff' }}>회원가입하기</a>
                         </div>
                         <div className="w-100 text-center mt-3">
                             <Button
@@ -142,7 +159,6 @@ function Login() {
                                 카카오로 로그인
                             </Button>
                         </div>
-                        {/* 테스트용 axios 버튼 추가 */}
                         <div className="w-100 text-center mt-3">
                             <Button
                                 variant="outline-info"
@@ -152,9 +168,40 @@ function Login() {
                                 테스트 요청 보내기
                             </Button>
                         </div>
+
+                        {/* 계정이 기억나지 않습니까? 링크 */}
+                        <div className="w-100 text-center mt-3">
+                            <a href="#!" onClick={() => setShowForgotModal(true)} style={{ color: '#00bfff' }}>계정이 기억나지 않습니까?</a>
+                        </div>
                     </Card.Body>
                 </Card>
             </div>
+
+            {/* 비밀번호 초기화 모달 */}
+            <Modal show={showForgotModal} onHide={() => setShowForgotModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>비밀번호 초기화</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group controlId="forgotEmail">
+                        <Form.Label>가입 시 입력한 이메일 주소를 입력해주세요</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="이메일 주소"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowForgotModal(false)}>
+                        취소
+                    </Button>
+                    <Button variant="primary" onClick={handleForgotPassword}>
+                        메일 보내기
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 }

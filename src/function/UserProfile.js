@@ -81,7 +81,7 @@ const UserProfile = () => {
                         </Card.Header>
                         <Card.Body>
                             <div className="d-flex mb-3">
-                                <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>이름 :</h5>
+                                <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>별명 :</h5>
                                 <p className="w-55" >{profile.username}</p>
                             </div>
                             <div className="d-flex mb-3">

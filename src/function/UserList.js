@@ -121,10 +121,10 @@ const UserList = () => {
             <h2 className="text-center my-4">유저 목록</h2>
             <Form className="mb-4">
                 <Form.Group controlId="emailSearch">
-                    <Form.Label>이름 검색</Form.Label>
+                    <Form.Label>별명 검색</Form.Label>
                     <Form.Control
                         type="text"
-                        placeholder="이름으로 검색"
+                        placeholder="별명으로 검색"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -134,7 +134,7 @@ const UserList = () => {
                 <thead>
                 <tr>
                     <th onClick={() => handleSort('loginId')}>로그인 ID</th>
-                    <th onClick={() => handleSort('username')}>이름</th>
+                    <th onClick={() => handleSort('username')}>별명</th>
                     <th onClick={() => handleSort('email')}>이메일</th>
                     <th onClick={() => handleSort('role')}>권한</th>
                     <th onClick={() => handleSort('createdAt')}>생성일</th>

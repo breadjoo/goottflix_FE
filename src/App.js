@@ -20,6 +20,7 @@ import MovieListAdmin from "./function/MovieListAdmin";
 import AdminPage from "./function/AdminPage";
 import RecommendedCard from "./function/RecommendedCard";
 import NfcData from "./function/NfcData";
+import ResetPassword from "./function/ResetPassword";
 
 function App() {
     return (
@@ -30,7 +31,7 @@ function App() {
                 <Welcome />
                 <Routes>
                     {/* 메인 페이지 */}
-                    <Route path="/" element={ <>
+                    <Route path="/recommendedCard" element={ <>
                                 <ImageSlider />
                                 <Header />
                                 <div className="container">
@@ -50,14 +51,7 @@ function App() {
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
-                    <Route path="/recommendedCard" element={ <>
-                        <ImageSlider />
-                        <Header />
-                        <div className="container">
-                            <MainContent />
-                            <RecommendedCard />
-                        </div>
-                        <Footer /> </>}/>
+                    <Route path="/auth/reset" element={<ResetPassword />} />
                 </Routes>
             </div>
         </Router>
