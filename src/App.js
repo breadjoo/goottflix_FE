@@ -31,7 +31,7 @@ function App() {
                 <Welcome />
                 <Routes>
                     {/* 메인 페이지 */}
-                    <Route path="/recommendedCard" element={ <>
+                    <Route path="/" element={ <>
                                 <ImageSlider />
                                 <Header />
                                 <div className="container">
@@ -52,6 +52,14 @@ function App() {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
                     <Route path="/auth/reset" element={<ResetPassword />} />
+                    <Route path="/recommendedCard" element={ <>
+                        <ImageSlider />
+                        <Header />
+                        <div className="container">
+                            <MainContent />
+                            <MovieCard />
+                        </div>
+                        <Footer /> </>} />
                 </Routes>
             </div>
         </Router>

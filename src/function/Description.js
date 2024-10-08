@@ -6,23 +6,41 @@ import "../css/Description.css";
 
 function Description() {
     const location = useLocation();
-    const {movie} = location.state;
+    const movie = location.state?.movie;
     const [reviews, setReviews] = useState([]);
     const [ratings, setRatings] = useState({}); // 각 영화별 별점 상태
     const [review, setReview] = useState("");
+    const [video, setVideo] = useState(null);
 
     useEffect(() => {
-        const getReviews = async () => {
+        const fetchData = async () => {
+            if (!movie || !movie.id) return; // movie가 없으면 early return
+
             try {
-                const response = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
-                setReviews(response.data || []);
+                // 리뷰 가져오기
+                const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
+                setReviews(reviewResponse.data || []);
+
+                // 유튜브 비디오 가져오기
+                const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+                    params: {
+                        part: 'snippet',
+                        q: movie.videoUrl,
+                        key: 'AIzaSyDkl-0XuLETbRGMS51xz98D8CqoMzmYevI', // 실제 API 키로 대체
+                        type: 'video',
+                        regionCode: 'kr',
+                    },
+                });
+                if (videoResponse.data.items.length > 0) {
+                    setVideo(videoResponse.data.items[0]); // 첫 번째 비디오를 설정
+                }
             } catch (err) {
-                alert("리뷰를 가져오는데 실패했습니다." + err.message);
+                alert("데이터를 가져오는 중 오류가 발생했습니다: " + err.message);
             }
         };
 
-        getReviews();
-    }, [movie.id]);
+        void fetchData();
+    }, [movie]);
 
     const handleRatingChange = (movieId, rating) => {
         setRatings(prevRatings => ({
@@ -72,13 +90,29 @@ function Description() {
         window.location.reload();
     }
 
+    if (!movie) {
+        return <div>영화 정보를 불러올 수 없습니다.</div>; // 영화 정보가 없을 때 메시지 표시
+    }
+
     return (
         <div>
-            <img
-                src={`http://localhost:8080${movie.posterUrl}`}
-                alt={movie.posterUrl}
-                style={{maxWidth:'400px', maxHeight:'300px'}}
-            />
+            <div>
+                <img
+                    src={`http://localhost:8080${movie.posterUrl}`}
+                    alt={movie.posterUrl}
+                    style={{maxWidth: "400px"}}
+                />
+                {video && (
+                    <iframe
+                        width="560"
+                        height="315"
+                        src={`https://www.youtube.com/embed/${video.id.videoId}?rel=0`}
+                        title={video.snippet.title}
+                        frameBorder="0"
+                        allowFullScreen
+                    />
+                )}
+            </div>
             <div className="movie_desc">
                 <p>{movie.title}</p>
                 <p>{movie.description}</p>
