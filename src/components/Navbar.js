@@ -81,27 +81,6 @@ const Navbar = () => {
             });
     }, []);
 
-    window.IMP.init("imp77446200");
-
-    const onClickPay = async () => {
-        window.IMP.request_pay({
-            pg: "kakaopay",
-            pay_method: "card",
-            amount: "9900",
-            name: "구독",
-        }, function(response){
-            const {status, err_msg} = response;
-            if(err_msg){
-                alert(err_msg);
-            }
-            if(status==="paid"){
-                alert("구독 결제 완료");
-                subscribe_success();
-            }
-
-        });
-    };
-
     // JWT 토큰 쿠키 삭제 함수
     const deleteCookie = (name) => {
         document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.localhost};`;
@@ -122,19 +101,6 @@ const Navbar = () => {
                 console.error('Logout failed', error);
             });
     };
-
-    const subscribe_success = async () => {
-        try{
-            await axios.post("http://localhost:8080/api/subscribe",null,{
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true  // 쿠키를 포함하여 요청
-            });
-        }catch (err){
-            alert(err);
-        }
-    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001f3f' }}>
@@ -158,14 +124,6 @@ const Navbar = () => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
-                            <button className="payment-button" type="button" onClick={onClickPay}>
-                                구독
-                            </button>
-                        </li>
-
-                    </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/"
