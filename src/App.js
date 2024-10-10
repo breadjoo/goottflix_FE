@@ -10,6 +10,7 @@ import Login from './function/Login';
 import UserProfile from "./function/UserProfile";
 import Signup from './function/SignUp';
 import NotificationComponent from "./function/NotificationComponent";
+import WatchMovie from "./function/WatchMovie";
 
 import Welcome from "./components/Welcome";
 import Description from "./function/Description";
@@ -60,6 +61,7 @@ function App() {
                             <MovieCard />
                         </div>
                         <Footer /> </>} />
+                    <Route path="/watchMovie" element={<WatchMovie/>}/>
                 </Routes>
             </div>
         </Router>
