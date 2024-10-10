@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import "../css/Card.css";
-import {useLocation} from "react-router-dom";
+import {useNavigate,useLocation} from "react-router-dom";
 import "../css/Description.css";
 
 function Description() {
+    const navigate = useNavigate();
     const location = useLocation();
     const movie = location.state?.movie;
     const [reviews, setReviews] = useState([]);
     const [ratings, setRatings] = useState({}); // 각 영화별 별점 상태
     const [review, setReview] = useState("");
     const [video, setVideo] = useState(null);
+    const [subscribe, setSubscribe] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,12 +23,17 @@ function Description() {
                 const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
                 setReviews(reviewResponse.data || []);
 
+                const getSubscribe = await  axios.get(`http://localhost:8080/api/userSubscribe`,{
+                    withCredentials: true  // 쿠키 포함
+                });
+                setSubscribe(getSubscribe.data === true);
+
                 // 유튜브 비디오 가져오기
                 const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
                     params: {
                         part: 'snippet',
                         q: movie.videoUrl,
-                        key: 'AIzaSyDkl-0XuLETbRGMS51xz98D8CqoMzmYevI', // 실제 API 키로 대체
+                        key: 'AIzaSyBhy1AR1O0Poc0383mS2yueYn3EfzoEW94', // 실제 API 키로 대체
                         type: 'video',
                         regionCode: 'kr',
                     },
@@ -90,6 +97,14 @@ function Description() {
         window.location.reload();
     }
 
+    const watchMovie = async (movie) => {
+        if(subscribe==true){
+            navigate("/watchMovie", {state:{movie}});
+        }else{
+            alert("구독한 사람만 볼수있습니다.");
+        }
+    }
+
     if (!movie) {
         return <div>영화 정보를 불러올 수 없습니다.</div>; // 영화 정보가 없을 때 메시지 표시
     }
@@ -120,6 +135,7 @@ function Description() {
                 <p>{movie.rating}</p>
                 <p>{movie.genre}</p>
                 <p>{movie.director}</p>
+                <button onClick={() => watchMovie(movie)}>영화 보러가기</button>
             </div>
             <div className="review_container">
                 <div className="write_review">
@@ -150,14 +166,16 @@ function Description() {
                 </div>
                 <div className="read_Review">
                     {reviews.map((re, index) => (
-                        <div key={index} style={{border:"1px solid black", padding: "10px", margin: "10px"}}>
-                            <p>아이디 : {re.nickname}</p>
-                            <p>별점 : {re.review.rating}</p>
-                            <p>리뷰내용 : {re.review.review}</p>
-                            <p>추천수 : {re.review.recommend}</p>
-                            <button onClick={() => recommendReview(re.review.id)}
-                                    style={{backgroundColor:"transparent", border:"none", fontSize:"14px"}}>추천하기</button>
-                        </div>
+                        re.review.review && (
+                            <div key={index} style={{border: "1px solid black", padding: "10px", margin: "10px"}}>
+                                <p>아이디 : {re.nickname}</p>
+                                <p>별점 : {re.review.rating}</p>
+                                <p>리뷰내용 : {re.review.review}</p>
+                                <p>추천수 : {re.review.recommend}</p>
+                                <button onClick={() => recommendReview(re.review.id)}>추천하기</button>
+                            </div>
+                        )
+
                     ))}
                 </div>
             </div>

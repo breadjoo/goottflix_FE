@@ -10,6 +10,7 @@ import Login from './function/Login';
 import UserProfile from "./function/UserProfile";
 import Signup from './function/SignUp';
 import NotificationComponent from "./function/NotificationComponent";
+import WatchMovie from "./function/WatchMovie";
 
 import Welcome from "./components/Welcome";
 import Description from "./function/Description";
@@ -18,6 +19,7 @@ import UserList from "./function/UserList";
 import MovieWrite from "./function/MovieWrite";
 import MovieListAdmin from "./function/MovieListAdmin";
 import AdminPage from "./function/AdminPage";
+import RecommendedCard from "./function/RecommendedCard";
 import NfcData from "./function/NfcData";
 import ResetPassword from "./function/ResetPassword";
 
@@ -61,9 +63,10 @@ function App() {
                         <Header />
                         <div className="container">
                             <MainContent />
-                            <MovieCard />
+                            <RecommendedCard />
                         </div>
                         <Footer /> </>} />
+                    <Route path="/watchMovie" element={<WatchMovie/>}/>
                     {/*채팅*/}
                     <Route path="/chatroom" element={<ChatLayout />} />
                     {/*<Route path="/chatroom" element={<ChatRoomList />} />*/}
