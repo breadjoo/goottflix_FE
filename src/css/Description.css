@@ -89,6 +89,17 @@
     color: #555;
 }
 
+.read_Review button{
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
 /* 별점 색상 */
 span {
     font-size: 1.5em;

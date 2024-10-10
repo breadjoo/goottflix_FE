@@ -1,0 +1,87 @@
+.chat-container {
+    width: 100%; /* 채팅 컨테이너를 부모의 너비에 맞춤 */
+    margin: 0;
+    padding: 20px;
+    background-color: #ffffff; /* 배경색 변경 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+.chat-message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 메시지 간격을 조금 더 늘림 */
+    height: 70vh; /* 메시지 컨테이너의 고정 높이 설정 */
+    overflow-y: scroll; /* 스크롤 추가 */
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd; /* 경계선 추가 */
+    border-radius: 10px;
+}
+
+.message {
+    max-width: 50%; /* 메시지 최대 너비를 줄임 */
+    padding: 12px;
+    border-radius: 15px;
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.message-left {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+}
+
+.message-right {
+    align-self: flex-end;
+    background-color: #d1e7dd;
+}
+
+.sender {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.message-input-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.message-input {
+    width: 80%; /* 입력창의 너비를 늘림 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+}
+
+.send-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background-color: #0056b3;
+}
+
+.chat-header {
+    text-align: center;
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: #888;
+    text-align: right;
+}
+
+.message-right .timestamp {
+    text-align: left;
+}
