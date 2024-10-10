@@ -1,0 +1,73 @@
+.chatroom-list-container {
+    width: 100%; /* 너비를 100%로 설정 */
+    margin: 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* 목록에 스크롤 추가 */
+}
+
+.chatroom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #e9ecef;
+    border-bottom: 1px solid #ddd;
+}
+
+.chatroom-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.chatroom-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.chatroom-item {
+    display: flex;
+    justify-content: center; /* 텍스트 중앙 정렬 */
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.chatroom-item:hover {
+    background-color: #f0f0f0;
+}
+
+.chatroom-create-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+.chatroom-create-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+}
+
+.chatroom-create-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.chatroom-create-container button:hover {
+    background-color: #0056b3;
+}

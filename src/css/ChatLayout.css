@@ -1,0 +1,23 @@
+.chat-layout-container {
+    display: flex;
+    height: 90vh; /* 높이를 90%로 조정하여 화면에 여유를 둠 */
+    margin: 20px auto; /* 상하 간격 추가 */
+}
+
+.chatroom-list-panel {
+    width: 25%; /* 왼쪽 패널 너비를 25%로 조정 */
+    border-right: 1px solid #ddd;
+    overflow-y: auto; /* 스크롤 추가 */
+}
+
+.chatroom-content-panel {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f7f7f7; /* 오른쪽 배경색 추가 */
+    overflow-y: auto; /* 오른쪽 패널에도 스크롤 추가 */
+}
+
+.chatroom-placeholder {
+    font-size: 20px;
+    color: #888;
+}
