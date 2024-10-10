@@ -23,6 +23,7 @@ function Description() {
                 const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
                 setReviews(reviewResponse.data || []);
 
+
                 const getSubscribe = await  axios.get(`http://localhost:8080/api/userSubscribe`,{
                     withCredentials: true  // 쿠키 포함
                 });
