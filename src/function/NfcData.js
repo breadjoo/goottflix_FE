@@ -8,6 +8,8 @@ const NfcData = () => {
     const [mode, setMode] = useState('register');  // 초기 모드는 'register'
     const [bookInfo, setBookInfo] = useState(null);  // BookInfo 데이터를 저장할 상태
     const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태
+    const [ssid, setSsid] = useState('');  // SSID 입력 상태
+    const [password, setPassword] = useState('');  // Password 입력 상태
     const navigate = useNavigate();  // 리디렉션을 위해 useNavigate 사용
 
     // 사용자 정보 가져와서 role 확인
@@ -68,6 +70,20 @@ const NfcData = () => {
             })
             .catch(error => {
                 alert('Error: ' + error.message);
+            });
+    };
+
+    // SSID와 Password 전송 함수
+    const sendWifiCredentials = () => {
+        const url = 'http://localhost:8080/wifi/connect';
+        axios.post(url, { ssid, password }, {
+            withCredentials: true
+        })
+            .then(response => {
+                alert('WiFi 정보가 성공적으로 전송되었습니다: ' + response.data);
+            })
+            .catch(error => {
+                alert('WiFi 정보 전송 중 오류 발생: ' + error.message);
             });
     };
 
@@ -171,6 +187,40 @@ const NfcData = () => {
                     </table>
                 </div>
             )}
+
+            {/* WiFi 설정을 위한 입력 폼 */}
+            <div className="mt-5">
+                <h3>WiFi 정보 입력</h3>
+                <div className="form-group">
+                    <label htmlFor="ssidInput">SSID:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="ssidInput"
+                        value={ssid}
+                        onChange={(e) => setSsid(e.target.value)}
+                        placeholder="WiFi SSID를 입력하세요"
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="passwordInput">Password:</label>
+                    <input
+                        type="password"
+                        className="form-control"
+                        id="passwordInput"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="WiFi 비밀번호를 입력하세요"
+                    />
+                </div>
+                <button
+                    className="btn btn-success mt-3"
+                    onClick={sendWifiCredentials}
+                    disabled={!ssid || !password}
+                >
+                    WiFi 정보 전송
+                </button>
+            </div>
         </div>
     );
 };

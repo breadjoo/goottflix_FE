@@ -20,13 +20,12 @@ function Description() {
                 // 리뷰 가져오기
                 const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
                 setReviews(reviewResponse.data || []);
-
                 // 유튜브 비디오 가져오기
                 const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
                     params: {
                         part: 'snippet',
-                        q: movie.videoUrl,
-                        key: 'AIzaSyDkl-0XuLETbRGMS51xz98D8CqoMzmYevI', // 실제 API 키로 대체
+                        q: `${movie.videoUrl}`,
+                        key: 'AIzaSyBhy1AR1O0Poc0383mS2yueYn3EfzoEW94', // 실제 API 키로 대체
                         type: 'video',
                         regionCode: 'kr',
                     },
