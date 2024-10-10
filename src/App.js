@@ -56,6 +56,14 @@ function App() {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
                     <Route path="/auth/reset" element={<ResetPassword />} />
+                    <Route path="/recommendedCard" element={ <>
+                        <ImageSlider />
+                        <Header />
+                        <div className="container">
+                            <MainContent />
+                            <MovieCard />
+                        </div>
+                        <Footer /> </>} />
                     {/*채팅*/}
                     <Route path="/chatroom" element={<ChatRoomList />} />
                     <Route path="/chat/:roomId" element={<ChatRoom />} />
