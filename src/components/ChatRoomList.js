@@ -1,11 +1,11 @@
+// ChatRoomList.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import '../css/ChatRoomList.css';
 
-function ChatRoomList({setSelectedRoomId}) {
+function ChatRoomList({ setSelectedRoomId }) {
     const [chatRooms, setChatRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
-
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/chatroom')
@@ -17,8 +17,6 @@ function ChatRoomList({setSelectedRoomId}) {
             });
     }, []);
 
-
-
     const createChatRoom = () => {
         if (!newRoomName.trim()) {
             alert("채팅방 이름을 입력하세요");
@@ -27,11 +25,9 @@ function ChatRoomList({setSelectedRoomId}) {
 
         axios.post('http://localhost:8080/api/chatroom/createroom', { name: newRoomName })
             .then(response => {
-                console.log("Created Room Response:", response.data);  // ChatRoom 객체가 반환되었는지 확인
                 const createdRoom = response.data;
-
                 setChatRooms(prevRooms => [...prevRooms, createdRoom]);
-                setNewRoomName('');  // 입력 필드 초기화
+                setNewRoomName('');
             })
             .catch(error => {
                 console.error('Error creating chat room:', error);
@@ -39,17 +35,18 @@ function ChatRoomList({setSelectedRoomId}) {
     };
 
     return (
-        <div>
-            <h2>채팅방 목록</h2>
-            <ul>
+        <div className="chatroom-list-container">
+            <div className="chatroom-header">
+                <h2>채팅방 목록</h2>
+            </div>
+            <ul className="chatroom-list">
                 {chatRooms.map(room => (
-                    <li key={room.id}>
-                        <Link to={`/chat/${room.id}`}>{room.name}</Link>
+                    <li key={room.id} className="chatroom-item" onClick={() => setSelectedRoomId(room.id)}>
+                        <span>{room.name}</span>
                     </li>
                 ))}
             </ul>
-            {/* 채팅방 생성 기능 추가 */}
-            <div>
+            <div className="chatroom-create-container">
                 <input
                     type="text"
                     placeholder="채팅방 이름"

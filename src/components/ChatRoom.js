@@ -1,11 +1,11 @@
+// ChatRoom.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import '../css/ChatRoom.css';
 
-function ChatRoom() {
-    const { roomId } = useParams();
+function ChatRoom({ roomId }) {  // props로 roomId 받기
     const [messages, setMessages] = useState([]);
     const [stompClient, setStompClient] = useState(null);
     const [messageInput, setMessageInput] = useState('');
@@ -13,6 +13,7 @@ function ChatRoom() {
     const [roomName, setRoomName] = useState('');
 
     useEffect(() => {
+        if (!roomId) return; // roomId가 없으면 실행하지 않음
 
         axios.get(`http://localhost:8080/api/chatroom/${roomId}/name`)
             .then(response => {
@@ -22,16 +23,14 @@ function ChatRoom() {
                 console.log("채팅방 이름을 가져오는데 실패함", error);
             });
 
-
         axios.get("http://localhost:8080/api/chatroom/getusername", { withCredentials: true })
             .then(response => {
-                setSender(response.data.username);  // 서버에서 반환된 사용자 이름을 설정
+                setSender(response.data.username);
             })
             .catch(error => {
                 console.error("Error fetching user information:", error);
             });
 
-        // 기존 메시지 가져오기
         axios.get(`http://localhost:8080/api/message/${roomId}`)
             .then(response => {
                 setMessages(response.data);
@@ -40,7 +39,6 @@ function ChatRoom() {
                 console.error('Error fetching messages:', error);
             });
 
-        // WebSocket 연결 설정
         const socket = new SockJS('http://localhost:8080/ws/chat');
         const client = new Client({
             webSocketFactory: () => socket,
@@ -63,7 +61,6 @@ function ChatRoom() {
         client.activate();
         setStompClient(client);
 
-        // 컴포넌트 언마운트 시 연결 해제
         return () => {
             if (client) {
                 client.deactivate();
@@ -74,7 +71,7 @@ function ChatRoom() {
     const sendMessage = () => {
         if (stompClient && messageInput) {
             const chatMessage = {
-                sender: sender, // 메시지에 sender 추가
+                sender: sender,
                 message: messageInput,
                 roomId: roomId,
             };
@@ -93,26 +90,40 @@ function ChatRoom() {
         }
     }
 
+    const formatTimestamp = (timestamp) => {
+        const date = new Date(timestamp);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    };
+
     return (
-        <div>
-            <h2>{roomName}</h2>
-            <div>
+        <div className="chat-container">
+            <h2 className="chat-header">{roomName}</h2>
+            <div className="chat-message-container">
                 {messages.map(msg => (
-                    <div key={msg.id}>
-                        <strong>{msg.sender}:</strong> {msg.message}
+                    <div
+                        key={msg.id}
+                        className={`message ${msg.sender === sender ? 'message-right' : 'message-left'}`}
+                    >
+                        <div className="sender">{msg.sender}</div>
+                        <div>{msg.message}</div>
+                        <div className="timestamp">
+                            {formatTimestamp(msg.timestamp)}
+                        </div>
                     </div>
                 ))}
             </div>
-            <div>
+            <div className="message-input-container">
                 <input
                     type="text"
                     placeholder="메시지를 입력하세요"
                     value={messageInput}
                     onChange={e => setMessageInput(e.target.value)}
                     onKeyPress={handleKeyPress}
-
+                    className="message-input"
                 />
-                <button onClick={sendMessage}>전송</button>
+                <button onClick={sendMessage} className="send-button">전송</button>
             </div>
         </div>
     );
