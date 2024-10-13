@@ -85,3 +85,10 @@
 .message-right .timestamp {
     text-align: left;
 }
+
+.chat-image {
+    max-width: 200px;  /* 원하는 최대 너비로 설정 */
+    max-height: 200px; /* 원하는 최대 높이로 설정 */
+    width: auto;
+    height: auto;
+}
