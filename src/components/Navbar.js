@@ -149,6 +149,9 @@ const Navbar = () => {
                         {username ? (
                             <>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to="/movieSearch" onClick={closeMenu}>영화검색</Link>
+                                </li>
+                                <li className="nav-item">
                                     <Link className="nav-link" to="/mypage" onClick={closeMenu}>마이페이지</Link>
                                 </li>
                                 <li className="nav-item">

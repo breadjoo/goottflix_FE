@@ -19,7 +19,6 @@ const MainContent = () => {
                 <div className="card shadow-sm">
                     <div className="card-body">
                         <h2 className="card-title">전체 영화 보러가기</h2>
-                        <p className="card-text">전체 영화</p>
                         <Button className="btn btn-primary" onClick={() => allMovies()}>보러 가기</Button>
                     </div>
                 </div>
@@ -28,7 +27,6 @@ const MainContent = () => {
                 <div className="card shadow-sm">
                     <div className="card-body">
                         <h2 className="card-title">추천 영화 보러가기</h2>
-                        <p className="card-text">추천 영화</p>
                         <Button className="btn btn-primary" onClick={() => recommendedMovies()}>보러가기</Button>
                     </div>
                 </div>
