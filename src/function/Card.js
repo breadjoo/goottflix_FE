@@ -74,24 +74,32 @@ function MovieCard() {
                         <ListGroup className="list-group-flush" style={{ backgroundColor: '#000', color: 'white' }}>
                             <ListGroup.Item style={{ backgroundColor: '#001f3f', color: 'white' }}>내 예상 별점</ListGroup.Item>
                             <ListGroup.Item style={{ backgroundColor: '#001f3f', color: 'white' }}>
-                                <div>
-                                    {[1, 2, 3, 4, 5].map(rating => (
-                                        <label key={rating}>
-                                            <input
-                                                type="radio"
-                                                name={`rating-${movie.id}`}
-                                                value={rating}
-                                                checked={ratings[movie.id] === rating}
-                                                onChange={() => handleRatingChange(movie.id, rating)}
-                                                style={{ display: 'none' }} // 라디오 버튼 숨기기
-                                            />
-                                            <span style={{ fontSize: '1.5em', cursor: 'pointer', color: ratings[movie.id] >= rating ? '#FFD700' : '#ccc' }}>★</span>
-                                        </label>
-                                    ))}
-                                </div>
+                                {
+
+                                    <div>
+                                        {[1, 2, 3, 4, 5].map(rating => (
+                                            <label key={rating}>
+                                                <input
+                                                    type="radio"
+                                                    name={`rating-${movie.id}`}
+                                                    value={rating}
+                                                    checked={ratings[movie.id] === rating}
+                                                    onChange={() => handleRatingChange(movie.id, rating)}
+                                                    style={{display: 'none'}} // 라디오 버튼 숨기기
+                                                />
+                                                <span style={{
+                                                    fontSize: '1.5em',
+                                                    cursor: 'pointer',
+                                                    color: ratings[movie.id] >= rating ? '#FFD700' : '#ccc'
+                                                }}>★</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                }
                             </ListGroup.Item>
                         </ListGroup>
-                        <ListGroup.Item style={{ backgroundColor: '#001f3f', color: 'white' }}>영화 별점 : {movie.rating}</ListGroup.Item>
+                        <ListGroup.Item style={{backgroundColor: '#001f3f', color: 'white'}}>영화 별점
+                            : {movie.rating}</ListGroup.Item>
                         <Card.Body className="d-flex justify-content-between">
                             <Button variant="outline-light" onClick={() => movie_Description(movie)}>영화 상세</Button>
                             <Button variant="outline-light" onClick={() => submitRating(movie.id)}>별점 주기</Button>

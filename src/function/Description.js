@@ -20,9 +20,10 @@ function Description() {
 
             try {
                 // 리뷰 가져오기
-                const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
+                const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`,{
+                    withCredentials: true  // 쿠키 포함
+                });
                 setReviews(reviewResponse.data || []);
-
 
                 const getSubscribe = await  axios.get(`http://localhost:8080/api/userSubscribe`,{
                     withCredentials: true  // 쿠키 포함
@@ -82,24 +83,38 @@ function Description() {
         window.location.reload();
     };
 
-    const recommendReview = async (userId) =>{
+    const recommendReview = async (reviewId) =>{
         try{
             await axios.post('http://localhost:8080/api/recommendUp', null,{
-                params:{userId},
+                params:{reviewId},
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true  // 쿠키를 포함하여 요청
             });
-            alert('리뷰 추천');
         }catch (err){
-            alert('리뷰 추천 실패'+err);
+            alert('에러 : '+err);
+        }
+        window.location.reload();
+    }
+
+    const declaration = async (reviewId) => {
+        try{
+            await  axios.post('http://localhost:8080/api/declaration',null,{
+                params:{reviewId},
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true  // 쿠키를 포함하여 요청
+            });
+        }catch (err){
+            alert('에러 : '+err);
         }
         window.location.reload();
     }
 
     const watchMovie = async (movie) => {
-        if(subscribe==true){
+        if(subscribe===true){
             navigate("/watchMovie", {state:{movie}});
         }else{
             alert("구독한 사람만 볼수있습니다.");
@@ -173,7 +188,13 @@ function Description() {
                                 <p>별점 : {re.review.rating}</p>
                                 <p>리뷰내용 : {re.review.review}</p>
                                 <p>추천수 : {re.review.recommend}</p>
-                                <button onClick={() => recommendReview(re.review.id)}>추천하기</button>
+                                {
+                                    re.isLikes ? (
+                                        <button onClick={() => recommendReview(re.review.id)}>추천취소</button>
+                                    ) : (
+                                        <button onClick={() => recommendReview(re.review.id)}>추천하기</button>
+                                    )}
+                                <button style={{backgroundColor:"red"}} onClick={() => declaration(re.review.id)}>스포일러신고</button>
                             </div>
                         )
 
