@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import {useNavigate} from 'react-router-dom';
+import { Container, Row, Col, Card, Button, Image } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile = () => {
     const [profile, setProfile] = useState(null);
@@ -24,7 +24,7 @@ const UserProfile = () => {
     }, []);
 
     const getSubscriptionStatus = (status) => {
-        switch(status) {
+        switch (status) {
             case 'free':
                 return '처음 회원가입';
             case 'subscribe':
@@ -46,7 +46,7 @@ const UserProfile = () => {
 
     const formatDateTime = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleString('ko-KR', { hour12: false}); // 날짜와 시간을 포함한 전체 표시
+        return date.toLocaleString('ko-KR', { hour12: false }); // 날짜와 시간을 포함한 전체 표시
     };
 
     const formatGender = (gender) => {
@@ -60,6 +60,7 @@ const UserProfile = () => {
     if (!profile) {
         return <div>Loading...</div>;
     }
+
     const handleUpdate = () => {
         navigate('/editProfile');
     };
@@ -69,32 +70,42 @@ const UserProfile = () => {
             className="my-5 d-flex justify-content-center align-items-center"
             style={{
                 minHeight: '100vh',
-                minWidth : '200vh',
+                minWidth: '200vh',
                 background: 'linear-gradient(to bottom, #000000, #001f3f)', // 그라데이션 배경 추가
             }}
         >
             <Row className="justify-content-center">
                 <Col md={6} className="d-flex justify-content-center">
-                    <Card className="shadow" style={{ backgroundColor: '#001f3f', color: 'white', width: '1200px' }}> {/* 너비를 400px로 설정 */}
+                    <Card className="shadow" style={{ backgroundColor: '#001f3f', color: 'white', width: '1200px' }}>
                         <Card.Header className="text-center" style={{ backgroundColor: '#001f3f' }}>
+                            <div className="d-flex justify-content-center mb-3">
+                                {/* 프로필 이미지 렌더링 */}
+                                <Image
+                                    src={profile.profileImage ? `http://localhost:8080${profile.profileImage}` : '/defaultProfile.png'} // 서버 주소 추가
+                                    roundedCircle
+                                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                                    alt="프로필 이미지"
+                                />
+
+                            </div>
                             <h2>나의 프로필</h2>
                         </Card.Header>
                         <Card.Body>
                             <div className="d-flex mb-3">
                                 <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>별명 :</h5>
-                                <p className="w-55" >{profile.username}</p>
+                                <p className="w-55">{profile.username}</p>
                             </div>
                             <div className="d-flex mb-3">
                                 <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>이메일 :</h5>
-                                <p className="w-75" >{profile.email}</p>
+                                <p className="w-75">{profile.email}</p>
                             </div>
                             <div className="d-flex mb-3">
                                 <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>생년월일 :</h5>
-                                <p className="w-75" >{formatDateTime(profile.birth)}</p>
+                                <p className="w-75">{formatDateTime(profile.birth)}</p>
                             </div>
                             <div className="d-flex mb-3">
                                 <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>성별 :</h5>
-                                <p className="w-75" >{formatGender(profile.gender)}</p>
+                                <p className="w-75">{formatGender(profile.gender)}</p>
                             </div>
                             <div className="d-flex mb-3">
                                 <h5 className="w-25" style={{ textAlign: 'right', paddingRight: '10px' }}>회원가입일 :</h5>
@@ -114,8 +125,7 @@ const UserProfile = () => {
                             </div>
                         </Card.Body>
                         <Card.Footer className="text-center" style={{ backgroundColor: '#001f3f' }}>
-                            <Button variant="outline-light" type="submit" className="w-50 mt-3"
-                                    onClick={handleUpdate}>
+                            <Button variant="outline-light" type="submit" className="w-50 mt-3" onClick={handleUpdate}>
                                 프로필 수정하기
                             </Button>
                         </Card.Footer>

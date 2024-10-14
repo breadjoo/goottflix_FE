@@ -12,6 +12,7 @@ const MovieWrite = () => {
     genre: '',
     director: '',
     file: null,
+    nation: '',
   });
   const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태
   const navigate = useNavigate();
@@ -161,6 +162,18 @@ const MovieWrite = () => {
                 name="director"
                 placeholder="감독"
                 value={formData.director}
+                onChange={handleChange}
+                required
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formNation" className="mt-3">
+            <Form.Label>국가</Form.Label>
+            <Form.Control
+                type="text"
+                name="nation"
+                placeholder="국가"
+                value={formData.nation}
                 onChange={handleChange}
                 required
             />
