@@ -42,7 +42,10 @@ function Description() {
             if (!movie || !movie.id) return;
 
             try {
-                const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`);
+                // 리뷰 가져오기
+                const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`,{
+                    withCredentials: true  // 쿠키 포함
+                });
                 setReviews(reviewResponse.data || []);
 
                 const getSubscribe = await axios.get(`http://localhost:8080/api/userSubscribe`, {
@@ -101,24 +104,38 @@ function Description() {
         window.location.reload();
     };
 
-    const recommendReview = async (userId) => {
-        try {
-            await axios.post('http://localhost:8080/api/recommendUp', null, {
-                params: { userId },
+    const recommendReview = async (reviewId) =>{
+        try{
+            await axios.post('http://localhost:8080/api/recommendUp', null,{
+                params:{reviewId},
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
             });
-            alert('리뷰 추천');
-        } catch (err) {
-            alert('리뷰 추천 실패' + err);
+        }catch (err){
+            alert('에러 : '+err);
+        }
+        window.location.reload();
+    }
+
+    const declaration = async (reviewId) => {
+        try{
+            await  axios.post('http://localhost:8080/api/declaration',null,{
+                params:{reviewId},
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true  // 쿠키를 포함하여 요청
+            });
+        }catch (err){
+            alert('에러 : '+err);
         }
         window.location.reload();
     };
 
     const watchMovie = async (movie) => {
-        if (subscribe == true) {
+        if (subscribe === true) {
             navigate('/watchMovie', { state: { movie } });
         } else {
             alert('구독한 사람만 볼 수 있습니다.');
@@ -246,13 +263,17 @@ function Description() {
                     {reviews.map((re, index) => (
                         re.review.review && (
                             <div key={index} className="card p-3 mb-3 shadow">
-                                <p><strong>닉네임:</strong> {re.nickname}</p>
-                                <p><strong>별점:</strong> {re.review.rating}</p>
-                                <p><strong>리뷰 내용:</strong> {re.review.review}</p>
-                                <p><strong>추천 수:</strong> {re.review.recommend}</p>
-                                <button className="btn btn-outline-primary" onClick={() => recommendReview(re.review.id)}>
-                                    추천하기
-                                </button>
+                                <p>아이디 : {re.nickname}</p>
+                                <p>별점 : {re.review.rating}</p>
+                                <p>리뷰내용 : {re.review.review}</p>
+                                <p>추천수 : {re.review.recommend}</p>
+                                {
+                                    re.isLikes ? (
+                                        <button className="btn btn-outline-primary" onClick={() => recommendReview(re.review.id)}>추천취소</button>
+                                    ) : (
+                                        <button className="btn btn-outline-primary" onClick={() => recommendReview(re.review.id)}>추천하기</button>
+                                    )}
+                                <button style={{backgroundColor:"red"}} onClick={() => declaration(re.review.id)}>스포일러신고</button>
                             </div>
                         )
                     ))}
