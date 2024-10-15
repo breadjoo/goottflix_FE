@@ -22,9 +22,6 @@ import AdminPage from "./function/AdminPage";
 import RecommendedCard from "./function/RecommendedCard";
 import NfcData from "./function/NfcData";
 import ResetPassword from "./function/ResetPassword";
-
-// import ChatRoomList from './components/ChatRoomList';
-// import ChatRoom from './components/ChatRoom';
 import ChatLayout from './components/ChatLayout';
 
 
@@ -69,8 +66,6 @@ function App() {
                     <Route path="/watchMovie" element={<WatchMovie/>}/>
                     {/*채팅*/}
                     <Route path="/chatroom" element={<ChatLayout />} />
-                    {/*<Route path="/chatroom" element={<ChatRoomList />} />*/}
-                    {/*<Route path="/chat/:roomId" element={<ChatRoom />} />*/}
                 </Routes>
             </div>
         </Router>

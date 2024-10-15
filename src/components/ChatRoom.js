@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import '../css/ChatRoom.css';
+import '../css/ChatRoom.css';  // 필요하면 CSS 파일 경로에 맞게 수정하세요
 
 function ChatRoom({ roomId }) {
     const [messages, setMessages] = useState([]);  // 채팅 메시지 목록
@@ -12,6 +12,7 @@ function ChatRoom({ roomId }) {
     const [roomName, setRoomName] = useState('');  // 채팅방 이름
     const [image, setImage] = useState(null);  // 업로드된 이미지 URL
     const messageEndRef = useRef(null);  // 스크롤 제어를 위한 ref
+    const fileInputRef = useRef(null);  // 파일 선택 input을 참조하는 ref
 
     // 채팅 메시지 목록을 받아왔을 때 스크롤을 맨 아래로 이동시키는 함수
     const scrollToBottom = () => {
@@ -19,7 +20,6 @@ function ChatRoom({ roomId }) {
             messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
-
 
     // 메시지가 업데이트될 때마다 자동 스크롤
     useEffect(() => {
@@ -74,34 +74,42 @@ function ChatRoom({ roomId }) {
         };
     }, [roomId]);
 
+    // 파일 업로드 처리 및 URL 반환
+    const uploadFile = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
 
-// 파일 업로드 처리 및 URL 반환
-        const uploadFile = async (file) => {
-            const formData = new FormData();
-            formData.append('file', file);
+        try {
+            const response = await axios.post('http://localhost:8080/api/upload/image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                withCredentials: true
+            });
+            return response.data;  // 서버에서 반환된 이미지 URL
+        } catch (error) {
+            console.error('파일 업로드 실패:', error);
+            return null;
+        }
+    };
 
-            try {
-                const response = await axios.post('http://localhost:8080/api/upload/image', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    withCredentials: true
-                });
-                return response.data;  // 서버에서 반환된 이미지 URL
-            } catch (error) {
-                console.error('파일 업로드 실패:', error);
-                return null;
-            }
-        };
-
-    // 이미지 파일을 업로드하고 URL을 저장
+    // 이미지 파일을 업로드하고 바로 전송
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const fileUrl = await uploadFile(file);  // 파일 업로드 후 URL 받기
             if (fileUrl) {
                 setImage(fileUrl);  // 업로드된 이미지 URL 저장
+                setMessageInput(fileUrl);
+                sendMessage();  // 파일 선택 후 자동으로 전송
             }
+        }
+    };
+
+    // 이미지 아이콘 클릭 시 파일 선택 창 열기
+    const handleIconClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
         }
     };
 
@@ -131,14 +139,6 @@ function ChatRoom({ roomId }) {
         }
     };
 
-    // 타임스탬프 포맷 함수
-    const formatTimestamp = (timestamp) => {
-        const date = new Date(timestamp);
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        return `${hours}:${minutes}`;
-    };
-
     return (
         <div className="chat-container">
             <h2 className="chat-header">{roomName}</h2>
@@ -152,15 +152,28 @@ function ChatRoom({ roomId }) {
                         ) : (
                             <div>{msg.message}</div>
                         )}
-                        <div className="timestamp">{formatTimestamp(msg.timestamp)}</div>
+                        <div className="timestamp">{msg.timestamp}</div>
                     </div>
                 ))}
-                {/* 스크롤을 자동으로 맞추기 위한 ref */}
+                {/* 스크롤을 자동으로 맞추기 */}
                 <div ref={messageEndRef} />
             </div>
             <div className="message-input-container">
-                {/* 파일 업로드 입력 필드 */}
-                <input type="file" accept="image/*" onChange={handleFileUpload} />
+                {/* 숨겨진 파일 업로드 input */}
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}  // input을 화면에 보이지 않게 숨김
+                />
+                {/* 이미지 아이콘 */}
+                <img
+                    src="/photo.png"  // public 폴더에 있는 이미지 경로
+                    alt="사진 업로드"
+                    onClick={handleIconClick}  // 아이콘 클릭 시 파일 선택 창 열기
+                    style={{ cursor: 'pointer', width: '30px', height: '30px' }}  // 클릭 가능하게 설정
+                />
                 {/* 텍스트 입력 필드 */}
                 <input
                     type="text"
