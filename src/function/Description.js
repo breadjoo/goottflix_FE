@@ -40,6 +40,7 @@ function Description() {
     useEffect(() => {
         const fetchData = async () => {
             if (!movie || !movie.id) return;
+            console.log("현재 영화 객체:", movie);  // movie 객체가 제대로 있는지 확인
 
             try {
                 // 리뷰 가져오기
@@ -142,13 +143,17 @@ function Description() {
         }
     };
 
-    const handleEditMovie = () => {
-        navigate(`/editMovie/${movie.id}`, { state: { movie } });
+    const handleEditMovie = async (movie) => {
+        navigate(`/editMovie`, { state: { movie } });
     };
-
-    const handleDeleteMovie = async () => {
+    const handleDeleteMovie = async (movie) => {
+        console.log("삭제할 영화 객체:", movie);
+        if (!movie || !movie.id) {
+            alert('잘못된 영화 정보입니다.');
+            return;
+        }
         try {
-            await axios.delete(`http://localhost:8080/api/movies/${movie.id}`, {
+            await axios.delete(`http://localhost:8080/api/movie/delete/${movie.id}`, {
                 withCredentials: true
             });
             alert('영화가 삭제되었습니다.');
@@ -192,8 +197,9 @@ function Description() {
 
                         {isAuthorized && (  // 관리자만 수정, 삭제 버튼이 보임
                             <div className="mt-3">
-                                <button className="btn btn-warning me-2" onClick={handleEditMovie}>영화 수정</button>
-                                <button className="btn btn-danger" onClick={handleDeleteMovie}>영화 삭제</button>
+                                <button className="btn btn-warning me-2" onClick={() =>handleEditMovie(movie)}>영화 수정</button>
+                                <button className="btn btn-danger" onClick={() => handleDeleteMovie(movie)}>영화 삭제
+                                </button>
                             </div>
                         )}
                     </div>
@@ -203,12 +209,12 @@ function Description() {
             {video && (
                 <div className="row mt-5">
                     <div className="col">
-                        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                        <div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden'}}>
                             <iframe
                                 src={`https://www.youtube.com/embed/${video.id.videoId}?rel=0`}
                                 title={video.snippet.title}
                                 frameBorder="0"
-                                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
                                 allowFullScreen
                             ></iframe>
                         </div>
@@ -220,7 +226,7 @@ function Description() {
                 <div className="col-md-12">
                     <div className="card p-4 shadow">
                         <h4>리뷰 작성</h4>
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex justify-content-center align-items-center">
                             {[1, 2, 3, 4, 5].map((rating) => (
                                 <label key={rating} className="mr-2">
                                     <input
@@ -229,7 +235,7 @@ function Description() {
                                         value={rating}
                                         checked={ratings[movie.id] === rating}
                                         onChange={() => handleRatingChange(movie.id, rating)}
-                                        style={{ display: 'none' }}
+                                        style={{display: 'none'}}
                                     />
                                     <span
                                         style={{
@@ -238,8 +244,8 @@ function Description() {
                                             color: ratings[movie.id] >= rating ? '#FFD700' : '#ccc'
                                         }}
                                     >
-                    ★
-                  </span>
+                            ★
+                        </span>
                                 </label>
                             ))}
                         </div>
@@ -250,9 +256,12 @@ function Description() {
                             onChange={(e) => setReview(e.target.value)}
                             placeholder="리뷰 내용을 입력하세요"
                         />
-                        <button className="btn btn-success mt-3" onClick={() => submitRating(movie.id)}>
-                            리뷰 작성
-                        </button>
+                        <div className="d-flex justify-content-center mt-3">
+                            <button className="btn btn-success btn-sm" onClick={() => submitRating(movie.id)}
+                                    style={{width: '100px'}}>
+                                리뷰 작성
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -267,13 +276,23 @@ function Description() {
                                 <p>별점 : {re.review.rating}</p>
                                 <p>리뷰내용 : {re.review.review}</p>
                                 <p>추천수 : {re.review.recommend}</p>
-                                {
-                                    re.isLikes ? (
-                                        <button className="btn btn-outline-primary" onClick={() => recommendReview(re.review.id)}>추천취소</button>
+                                <div className="d-flex justify-content-center">
+                                    {re.isLikes ? (
+                                        <button className="btn btn-outline-primary btn-sm"
+                                                onClick={() => recommendReview(re.review.id)} style={{width: '80px'}}>
+                                            추천취소
+                                        </button>
                                     ) : (
-                                        <button className="btn btn-outline-primary" onClick={() => recommendReview(re.review.id)}>추천하기</button>
+                                        <button className="btn btn-outline-primary btn-sm"
+                                                onClick={() => recommendReview(re.review.id)} style={{width: '80px'}}>
+                                            추천하기
+                                        </button>
                                     )}
-                                <button style={{backgroundColor:"red"}} onClick={() => declaration(re.review.id)}>스포일러신고</button>
+                                    <button className="btn btn-danger btn-sm ms-2"
+                                            onClick={() => declaration(re.review.id)} style={{width: '80px'}}>
+                                        스포일러
+                                    </button>
+                                </div>
                             </div>
                         )
                     ))}

@@ -7,6 +7,9 @@ const UsernameSetting = () => {
     const [isUsernameValid, setIsUsernameValid] = useState(null); // 중복 확인 상태 저장
     const [errorMessage, setErrorMessage] = useState(''); // 에러 메시지 저장
 
+    const deleteCookie = (name) => {
+        document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.localhost};`;
+    };
     // 유저네임 중복 체크 함수
     const checkUsernameAvailability = () => {
         if (username.trim() === '') { // 입력된 값이 없으면 경고 메시지 출력
@@ -51,7 +54,8 @@ const UsernameSetting = () => {
             withCredentials: true
         })
             .then(response => {
-                alert('Username has been set successfully');
+                deleteCookie('Authorization');
+                alert('설정이 완료되었습니다 다시 로그인해주세요!');
                 window.location.href = '/login'; // 설정 후 로그인 페이지로 리디렉션
             })
             .catch(error => {
