@@ -28,6 +28,7 @@ import ResetPassword from "./function/ResetPassword";
 import ChatLayout from './components/ChatLayout';
 import UsernameSetting from "./function/UsernameSetting";
 import MovieSearch from "./function/MovieSearch";
+import EditMovie from "./function/EditMovie";
 
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
+                    <Route path="/editMovie" element={<EditMovie/>}/>
                     <Route path="/set-username" element={<UsernameSetting />} />
                     <Route path="/recommendedCard" element={ <>
                         <ImageSlider />

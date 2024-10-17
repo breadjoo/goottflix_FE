@@ -33,14 +33,14 @@ const EditUserProfile = () => {
         const { name, value, files } = e.target;
         setProfile(prevState => ({
             ...prevState,
-            [name]: files ? files[0] : value,  // 파일이면 files[0] 처리
+            [name]: files ? files[0] : (value || ''),  // 파일이면 files[0] 처리
         }));
         setIsUsernameValid(null);  // 중복 확인 상태 초기화
     };
 
     // 유저네임 중복 체크 함수
     const checkUsernameAvailability = () => {
-        if (profile.username.trim() === '') {
+        if (!profile.username || profile.username.trim() === '') {
             setIsUsernameValid(false);
             setErrorMessage('닉네임을 입력해주세요');
             return;
@@ -135,7 +135,7 @@ const EditUserProfile = () => {
                                             variant="outline-light"
                                             className="ms-2"
                                             onClick={checkUsernameAvailability}
-                                            disabled={profile.username.trim() === ''}
+                                            disabled={!profile.username || profile.username.trim() === ''}
                                         >
                                             중복 확인
                                         </Button>
