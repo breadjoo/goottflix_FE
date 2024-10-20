@@ -149,7 +149,10 @@ const Navbar = () => {
                         {/* 로그인 여부에 따른 버튼 조건부 렌더링 */}
                         {username ? (
                             <>
-                            <li className="nav-item">
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/movieSearch" onClick={closeMenu}>영화검색</Link>
+                                </li>
+                                <li className="nav-item">
                                     <Link className="nav-link" to="/mypage" onClick={closeMenu}>마이페이지</Link>
                                 </li>
                                 <li className="nav-item">

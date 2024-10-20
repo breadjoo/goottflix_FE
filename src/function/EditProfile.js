@@ -8,11 +8,11 @@ const EditUserProfile = () => {
         birth: '',
         gender: '',
         role: '',
-        subscribe: ''
+        subscribe: '',
+        profileImage: null,  // 프로필 이미지 필드 추가
     });
-    const [error, setError] = useState('');
-    const [usernameCheckMessage, setUsernameCheckMessage] = useState(''); // 중복 확인 메시지
-    const [isUsernameChecked, setIsUsernameChecked] = useState(false); // 중복 확인 여부
+    const [isUsernameValid, setIsUsernameValid] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -22,7 +22,7 @@ const EditUserProfile = () => {
                 });
                 setProfile(response.data);
             } catch (err) {
-                setError('Failed to load user profile.');
+                console.error('Failed to load user profile:', err);
             }
         };
 
@@ -30,48 +30,79 @@ const EditUserProfile = () => {
     }, []);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
         setProfile(prevState => ({
             ...prevState,
-            [name]: value
+            [name]: files ? files[0] : (value || ''),  // 파일이면 files[0] 처리
         }));
-        setIsUsernameChecked(false); // 별명이 바뀌면 중복 확인을 다시 하도록 설정
+        setIsUsernameValid(null);  // 중복 확인 상태 초기화
     };
 
-    // 사용자 별명 중복 확인 함수
-    const checkUsername = async () => {
-        try {
-            const response = await axios.post('http://localhost:8080/user/username/check', null, {
-                withCredentials: true,
-                params: { username: profile.username }
-            });
-            setUsernameCheckMessage('사용 가능한 별명입니다.');
-            setIsUsernameChecked(true);
-        } catch (error) {
-            setUsernameCheckMessage('이미 존재하는 별명입니다.');
-            setIsUsernameChecked(false);
+    // 유저네임 중복 체크 함수
+    const checkUsernameAvailability = () => {
+        if (!profile.username || profile.username.trim() === '') {
+            setIsUsernameValid(false);
+            setErrorMessage('닉네임을 입력해주세요');
+            return;
         }
+
+        axios.post('http://localhost:8080/user/username/check', null, {
+            params: { username: profile.username },
+            withCredentials: true
+        })
+            .then(response => {
+                if (response.data.available) {
+                    setIsUsernameValid(true);
+                    setErrorMessage('사용 가능한 닉네임입니다.');
+                } else {
+                    setIsUsernameValid(false);
+                    setErrorMessage('이미 사용중인 닉네임입니다.');
+                }
+            })
+            .catch(() => {
+                setIsUsernameValid(false);
+                setErrorMessage('Error checking username');
+            });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!isUsernameChecked) {
+        if (isUsernameValid !== true) {
             alert('별명 중복 확인을 해주세요.');
             return;
         }
 
-        axios.post('http://localhost:8080/user/profile/update', profile, {
-            withCredentials: true
+        const formData = new FormData();
+
+        // JSON 데이터를 문자열로 변환하여 추가
+        formData.append('user', new Blob([JSON.stringify({
+            username: profile.username,
+            birth: profile.birth,
+            gender: profile.gender
+        })], { type: 'application/json' }));
+
+        // 파일이 있을 경우 추가
+        if (profile.profileImage) {
+            formData.append('file', profile.profileImage);
+        }
+
+        axios.post('http://localhost:8080/user/profile/update', formData, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         })
             .then(() => {
-                alert('Profile updated successfully!');
+                alert('프로필이 성공적으로 업데이트되었습니다.');
+                window.location.href = '/login';  // 로그아웃 후 로그인 페이지로 리다이렉트
             })
             .catch((err) => {
                 console.error('정보 수정 실패:', err);
                 alert('정보 수정 실패');
             });
     };
+
 
     return (
         <Container
@@ -82,19 +113,14 @@ const EditUserProfile = () => {
                 background: 'linear-gradient(to bottom, #000000, #001f3f)', // 그라데이션 적용
             }}
         >
-            <div
-                className="d-flex justify-content-center align-items-center"
-                style={{
-                    minHeight: '100vh',
-                }}
-            >
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
                 <Card style={{ width: '400px', backgroundColor: '#001f3f', color: 'white' }}>
                     <Card.Body>
                         <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>프로필 수정</h2>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group id="username" className="mb-3">
                                 <Form.Label>별명</Form.Label>
-                                <div className="d-flex">
+                                <div className="input-group">
                                     <Form.Control
                                         type="text"
                                         name="username"
@@ -102,19 +128,28 @@ const EditUserProfile = () => {
                                         onChange={handleChange}
                                         required
                                         style={{ backgroundColor: '#000', color: 'white' }}
+                                        className={`form-control ${isUsernameValid === false ? 'is-invalid' : isUsernameValid === true ? 'is-valid' : ''}`}
                                     />
-                                    <Button
-                                        variant="outline-light"
-                                        className="ms-2"
-                                        onClick={checkUsername}
-                                    >
-                                        중복 확인
-                                    </Button>
+                                    <div className="input-group-append">
+                                        <Button
+                                            variant="outline-light"
+                                            className="ms-2"
+                                            onClick={checkUsernameAvailability}
+                                            disabled={!profile.username || profile.username.trim() === ''}
+                                        >
+                                            중복 확인
+                                        </Button>
+                                    </div>
                                 </div>
-                                {usernameCheckMessage && (
-                                    <p style={{ color: usernameCheckMessage === '사용 가능한 별명입니다.' ? 'green' : 'red' }}>
-                                        {usernameCheckMessage}
-                                    </p>
+                                {isUsernameValid === false && (
+                                    <div className="invalid-feedback d-block">
+                                        {errorMessage}
+                                    </div>
+                                )}
+                                {isUsernameValid === true && (
+                                    <div className="valid-feedback d-block">
+                                        {errorMessage}
+                                    </div>
                                 )}
                             </Form.Group>
 
@@ -143,6 +178,17 @@ const EditUserProfile = () => {
                                     <option value="F">여성</option>
                                 </Form.Control>
                             </Form.Group>
+
+                            <Form.Group id="profileImage" className="mb-3">
+                                <Form.Label>프로필 이미지 업로드</Form.Label>
+                                <Form.Control
+                                    type="file"
+                                    name="profileImage"
+                                    onChange={handleChange}  // 파일 처리
+                                    style={{ backgroundColor: '#000', color: 'white' }}
+                                />
+                            </Form.Group>
+
                             <Form.Group id="subscribe" className="mb-3">
                                 <Form.Label>구독 상태</Form.Label>
                                 <Form.Control
@@ -154,7 +200,13 @@ const EditUserProfile = () => {
                                     style={{ backgroundColor: '#000', color: 'white' }}
                                 />
                             </Form.Group>
-                            <Button variant="outline-light" type="submit" className="w-100 mt-3">
+
+                            <Button
+                                variant="outline-light"
+                                type="submit"
+                                className="w-100 mt-3"
+                                disabled={isUsernameValid !== true || profile.username.trim() === ''}
+                            >
                                 프로필 업데이트
                             </Button>
                         </Form>

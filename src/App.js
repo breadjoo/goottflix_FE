@@ -23,6 +23,9 @@ import RecommendedCard from "./function/RecommendedCard";
 import NfcData from "./function/NfcData";
 import ResetPassword from "./function/ResetPassword";
 import ChatLayout from './components/ChatLayout';
+import UsernameSetting from "./function/UsernameSetting";
+import MovieSearch from "./function/MovieSearch";
+import EditMovie from "./function/EditMovie";
 
 function App() {
     return (
@@ -43,6 +46,7 @@ function App() {
                                 <Footer /> </>} />
                     {/* 로그인 페이지 */}
                     <Route path="/login" element={<Login />} />
+                    <Route path="/auth/reset" element={<ResetPassword />} />
                     <Route path="/mypage" element={<UserProfile />} />
                     <Route path="/editProfile" element={<EditProfile />} />
                     <Route path="/adminPage" element={<AdminPage />} />
@@ -50,10 +54,12 @@ function App() {
                     <Route path="/movieWrite" element={<MovieWrite />} />
                     <Route path="/movieListAdmin" element={<MovieListAdmin />} />
                     <Route path="/nfcData" element={<NfcData />} />
+                    <Route path="/movieSearch" element={<MovieSearch />} />
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>
-                    <Route path="/auth/reset" element={<ResetPassword />} />
+                    <Route path="/editMovie" element={<EditMovie/>}/>
+                    <Route path="/set-username" element={<UsernameSetting />} />
                     <Route path="/recommendedCard" element={ <>
                         <ImageSlider />
                         <Header />
