@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../fe-goottflix2.iml" filepath="$PROJECT_DIR$/../fe-goottflix2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fe-goottflix.iml" filepath="$PROJECT_DIR$/../fe-goottflix.iml" />
     </modules>
   </component>
 </project>
