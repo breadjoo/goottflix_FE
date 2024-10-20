@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
@@ -87,7 +88,9 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
                                 className="notification-icon"
                             />
                             <div className="notification-content">
-                                <a href={notify.url}>{notify.content}</a>
+                                <Link to ={notify.url} state={{movie : {id: notify.movieId} }}>
+                                    {notify.content}
+                                </Link>
                             </div>
                             <img
                                 src='/deleteicon.png'

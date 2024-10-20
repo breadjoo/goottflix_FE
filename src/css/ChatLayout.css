@@ -1,23 +1,23 @@
 .chat-layout-container {
     display: flex;
-    height: 90vh; /* 높이를 90%로 조정하여 화면에 여유를 둠 */
-    margin: 20px auto; /* 상하 간격 추가 */
+    height: 100vh; /* 화면 전체를 차지하게 설정 */
 }
 
 .chatroom-list-panel {
-    width: 25%; /* 왼쪽 패널 너비를 25%로 조정 */
-    border-right: 1px solid #ddd;
-    overflow-y: auto; /* 스크롤 추가 */
+    width: 25%; /* 채팅방 목록 패널 넓이 설정 */
+    border-right: 1px solid #ccc; /* 경계선 추가 */
+    overflow-y: auto; /* 채팅방 목록이 길어지면 스크롤 추가 */
 }
 
 .chatroom-content-panel {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: #f7f7f7; /* 오른쪽 배경색 추가 */
-    overflow-y: auto; /* 오른쪽 패널에도 스크롤 추가 */
+    width: 75%; /* 채팅방 콘텐츠 패널 넓이 설정 */
+    display: flex;
+    flex-direction: column;
 }
 
 .chatroom-placeholder {
-    font-size: 20px;
+    margin: auto; /* 채팅방을 선택하지 않았을 때 중앙에 메시지 표시 */
+    text-align: center;
+    font-size: 18px;
     color: #888;
 }
