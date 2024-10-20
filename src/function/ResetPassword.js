@@ -10,6 +10,7 @@ function ResetPassword() {
     const [successMessage, setSuccessMessage] = useState('');
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // URL에서 token 값을 가져옴
     const token = searchParams.get('token');
@@ -23,7 +24,7 @@ function ResetPassword() {
             return;
         }
 
-        axios.post('http://localhost:8080/auth/reset', null, {
+        axios.post(`${API_URL}/auth/reset`, null, {
             params: {
                 token: token,
                 password: newPassword

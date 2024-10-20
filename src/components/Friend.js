@@ -12,6 +12,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
     const [userId, setUserId] = useState(''); // 현재 로그인된 사용자 ID
     const [friendList, setFriendList] = useState([]); // 친구가 된 사람들 목록
     const [friendToDelete, setFriendToDelete] = useState(null);
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 
     // JWT 토큰에서 사용자 ID 가져오기
@@ -31,7 +32,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/friend/search', {
+                const response = await axios.get(`${API_URL}/friend/search`, {
                     withCredentials: true,
                 }); // 모든 친구 목록을 가져오는 API
                 setFriends(response.data);
@@ -47,7 +48,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
     useEffect(() => {
         const fetchFriendList = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/friend/list', {
+                const response = await axios.get(`${API_URL}/friend/list`, {
                     withCredentials: true,
                 });
                 setFriendList(response.data); // 친구가 된 사람들 목록 설정
@@ -74,7 +75,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
     // 친구 추가 요청 보내기
     const handleAddFriend = async (friendId) => {
         try {
-            await axios.post('http://localhost:8080/friend/add', null, {
+            await axios.post(`${API_URL}/friend/add`, null, {
                 params: {
                     friendId: friendId // 추가할 친구의 ID
                 },
@@ -93,7 +94,7 @@ const FriendPopup = ({ isOpen, popupRef }) => {
     // 친구 삭제 요청 보내기
     const handleDeleteFriend = async (friendId) => {
         try {
-            await axios.delete('http://localhost:8080/friend/remove', {
+            await axios.delete(`${API_URL}/friend/remove`, {
                 params: {
                     id : friendId// 삭제할 친구의 ID
                 },

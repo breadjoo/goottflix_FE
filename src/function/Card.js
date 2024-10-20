@@ -13,13 +13,14 @@ function MovieCard() {
     const [page, setPage] = useState(1); // 현재 페이지 상태
     const [totalMovies, setTotalMovies] = useState(0); // 총 영화 개수 상태
     const [loading, setLoading] = useState(false); // 로딩 상태
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     useEffect(() => {
         const getMovies = async () => {
             setLoading(true); // 로딩 시작
             try {
                 // 서버로부터 페이지에 해당하는 영화 목록과 전체 영화 개수 받아옴
-                const response = await axios.get('http://localhost:8080/api/list/page', {
+                const response = await axios.get(`${API_URL}/api/list/page`, {
                     params: { page, size: 12 }, // 페이지와 사이즈를 API에 요청
                     withCredentials: true
                 });
@@ -63,7 +64,7 @@ function MovieCard() {
         }
 
         try {
-            await axios.post('http://localhost:8080/api/review', null, {
+            await axios.post(`${API_URL}/api/review`, null, {
                 params: { movieId, rating },
                 headers: {
                     'Content-Type': 'application/json'
@@ -92,7 +93,7 @@ function MovieCard() {
             {movies.map(movie => (
                 <div key={movie.id} className="movie-card"> {/* movie.id로 고유한 key 설정 */}
                     <Card style={{ width: '18rem', backgroundColor: '#001f3f', color: 'white' }}>
-                        <Card.Img variant="top" src={"http://localhost:8080" + movie.posterUrl} alt={movie.posterUrl} className="card-img" />
+                        <Card.Img variant="top" src={`${API_URL}` + movie.posterUrl} alt={movie.posterUrl} className="card-img" />
                         <Card.Body>
                             <Card.Title style={{ color: '#00bfff' }}>{movie.title}</Card.Title>
                             <Card.Text>{movie.intro}</Card.Text>

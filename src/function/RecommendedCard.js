@@ -10,11 +10,12 @@ function RecommendedCard() {
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
     const [ratings, setRatings] = useState({}); // 각 영화별 별점 상태
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     useEffect(() => {
         const getMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/recommendedList', {
+                const response = await axios.get(`${API_URL}/api/recommendedList`, {
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -46,7 +47,7 @@ function RecommendedCard() {
 
         try {
             // 서버에 별점 제출 (API 경로는 필요에 따라 수정)
-            await axios.post('http://localhost:8080/api/review', null, {
+            await axios.post(`${API_URL}/api/review`, null, {
                 params:{movieId, rating},
                 headers: {
                     'Content-Type': 'application/json'
@@ -69,7 +70,7 @@ function RecommendedCard() {
             {movies.map(movie => (
                 <div key={movie.id} className="movie-card">
                     <Card style={{ width: '18rem', backgroundColor: '#001f3f', color: 'white' }}>
-                        <Card.Img variant="top" src={"http://localhost:8080" + movie.posterUrl} alt={movie.posterUrl} className="card-img" />
+                        <Card.Img variant="top" src={"${API_URL}" + movie.posterUrl} alt={movie.posterUrl} className="card-img" />
                         <Card.Body>
                             <Card.Title style={{ color: '#00bfff' }}>{movie.title}</Card.Title>
                             <Card.Text>{movie.description}</Card.Text>

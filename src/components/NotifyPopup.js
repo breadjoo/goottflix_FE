@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     const [notifications, setNotifications] = useState([]);
 
 
     useEffect(() => {
         if (isOpen) {
-            axios.get('http://localhost:8080/notify/allnotify', {
+            axios.get(`${API_URL}/notify/allnotify`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -26,7 +27,7 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     }, [isOpen, setUnreadCount]);
 
     const handleReadNotify = (notifyId, userId) => {
-        axios.put("http://localhost:8080/notify/read", null, {
+        axios.put(`${API_URL}/notify/read`, null, {
             params: {
                 userId: userId,
                 notifyId: notifyId
@@ -51,7 +52,7 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     };
 
     const handleDeleteNotify = (notifyId) => {
-        axios.delete('http://localhost:8080/notify/deleteNotify', {
+        axios.delete(`${API_URL}/notify/deleteNotify`, {
             params: { notifyId },
             withCredentials: true,
         })
@@ -87,7 +88,9 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
                                 className="notification-icon"
                             />
                             <div className="notification-content">
-                                <a href={notify.url}>{notify.content}</a>
+                                <Link to={notify.url} state={{ movie: { id: notify.movieId } }}>
+                                    {notify.content}
+                                </Link>
                             </div>
                             <img
                                 src='/deleteicon.png'

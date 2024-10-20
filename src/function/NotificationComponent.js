@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 function NotificationComponent({ setUnreadCount, setNotifications }) {
 
     useEffect(() => {
-        const eventSource = new EventSource(`http://localhost:8080/notify/subscribe`,
+        const eventSource = new EventSource(`${API_URL}/notify/subscribe`,
             {withCredentials: true});
 
         eventSource.addEventListener("notify", function (event) {

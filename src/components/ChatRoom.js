@@ -11,11 +11,12 @@ function ChatRoom({ roomId }) {  // props로 roomId 받기
     const [messageInput, setMessageInput] = useState('');
     const [sender, setSender] = useState('');
     const [roomName, setRoomName] = useState('');
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     useEffect(() => {
         if (!roomId) return; // roomId가 없으면 실행하지 않음
 
-        axios.get(`http://localhost:8080/api/chatroom/${roomId}/name`)
+        axios.get(`${API_URL}/api/chatroom/${roomId}/name`)
             .then(response => {
                 setRoomName(response.data);
             })
@@ -23,7 +24,7 @@ function ChatRoom({ roomId }) {  // props로 roomId 받기
                 console.log("채팅방 이름을 가져오는데 실패함", error);
             });
 
-        axios.get("http://localhost:8080/api/chatroom/getusername", { withCredentials: true })
+        axios.get(`${API_URL}/api/chatroom/getusername`, { withCredentials: true })
             .then(response => {
                 setSender(response.data.username);
             })
@@ -31,7 +32,7 @@ function ChatRoom({ roomId }) {  // props로 roomId 받기
                 console.error("Error fetching user information:", error);
             });
 
-        axios.get(`http://localhost:8080/api/message/${roomId}`)
+        axios.get(`${API_URL}/api/message/${roomId}`)
             .then(response => {
                 setMessages(response.data);
             })
@@ -39,7 +40,7 @@ function ChatRoom({ roomId }) {  // props로 roomId 받기
                 console.error('Error fetching messages:', error);
             });
 
-        const socket = new SockJS('http://localhost:8080/ws/chat');
+        const socket = new SockJS(`${API_URL}/ws/chat`);
         const client = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
