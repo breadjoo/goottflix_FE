@@ -13,11 +13,12 @@ const EditUserProfile = () => {
     });
     const [isUsernameValid, setIsUsernameValid] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/user/profile', {
+                const response = await axios.get(`${API_URL}/user/profile`, {
                     withCredentials: true
                 });
                 setProfile(response.data);
@@ -46,7 +47,7 @@ const EditUserProfile = () => {
             return;
         }
 
-        axios.post('http://localhost:8080/user/username/check', null, {
+        axios.post(`${API_URL}/user/username/check`, null, {
             params: { username: profile.username },
             withCredentials: true
         })
@@ -87,7 +88,7 @@ const EditUserProfile = () => {
             formData.append('file', profile.profileImage);
         }
 
-        axios.post('http://localhost:8080/user/profile/update', formData, {
+        axios.post(`${API_URL}/user/profile/update`, formData, {
             withCredentials: true,
             headers: {
                 'Content-Type': 'multipart/form-data',

@@ -9,12 +9,13 @@ const NfcData = () => {
     const [bookInfo, setBookInfo] = useState(null);  // BookInfo 데이터를 저장할 상태
     const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태
     const navigate = useNavigate();  // 리디렉션을 위해 useNavigate 사용
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 사용자 정보 가져와서 role 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data; // 사용자 role 정보 확인
                 if (role === 'ROLE_ADMIN') {
                     setIsAuthorized(true);  // 권한이 있으면 true로 설정
@@ -35,7 +36,7 @@ const NfcData = () => {
     // NFC UID 수신
     useEffect(() => {
         if (isAuthorized) {  // 관리자 권한이 있을 때만 NFC 데이터를 받아옴
-            const eventSource = new EventSource('http://localhost:8080/book/nfc-data', {
+            const eventSource = new EventSource(`${API_URL}/book/nfc-data`, {
                 withCredentials: true
             });
 
@@ -52,7 +53,7 @@ const NfcData = () => {
 
     // POST 요청을 통해 UID와 모드를 전송
     const sendUidToBackend = () => {
-        const url = 'http://localhost:8080/book/process-card';
+        const url = `${API_URL}/book/process-card`;
         axios.post(url, { uid, mode }, {
             withCredentials: true
         })

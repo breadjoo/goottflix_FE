@@ -18,12 +18,13 @@ const EditMovie = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const movieId = location.state?.movie?.id;
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 사용자 정보 가져와서 role 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data;
                 if (role === 'ROLE_ADMIN') {
                     setIsAuthorized(true);  // 권한이 있으면 true로 설정
@@ -51,7 +52,7 @@ const EditMovie = () => {
             }
 
             try {
-                const response = await axios.get(`http://localhost:8080/api/movie/${movieId}`, {
+                const response = await axios.get(`${API_URL}/api/movie/${movieId}`, {
                     withCredentials: true
                 });
                 // 응답받은 데이터를 formData에 설정
@@ -96,7 +97,7 @@ const EditMovie = () => {
         data.append('id', movieId);
         console.log(data);
 
-        fetch(`http://localhost:8080/api/movie/modify`, {
+        fetch(`${API_URL}/api/movie/modify`, {
             method: 'POST',
             body: data,
         }, )

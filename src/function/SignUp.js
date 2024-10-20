@@ -3,6 +3,7 @@ import { Form, Button, Container, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 function Signup() {
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
     const [formData, setFormData] = useState({
         loginId: '',
         username: '',
@@ -25,7 +26,9 @@ function Signup() {
 
     // 이메일 인증 코드 발송
     const sendVerificationCode = () => {
-        axios.post('http://localhost:8080/auth/sendCode', null, {
+        console.log("이메일 인증코드 발송");
+        console.log(API_URL);
+        axios.post(`${API_URL}/auth/sendCode`, null, {
             params: { email: formData.email }
         })
             .then(response => {
@@ -40,12 +43,13 @@ function Signup() {
                 alert('인증 코드 발송 실패 : ' + error.response.data);
             });
     };
-
     // 인증 코드 확인
     const verifyCode = () => {
-        axios.post('http://localhost:8080/auth/verifyCode', {
-            email: formData.email,
-            code: formData.verificationCode
+        axios.post(`${API_URL}/auth/verifyCode`, null, {
+            params: {
+                email: formData.email,
+                code: formData.verificationCode
+            }
         })
             .then(response => {
                 alert('이메일 인증이 완료되었습니다.');
@@ -77,7 +81,7 @@ function Signup() {
         const dataToSubmit = { ...formData };
         delete dataToSubmit.confirmPassword;
 
-        axios.post('http://localhost:8080/api/join', dataToSubmit)
+        axios.post(`${API_URL}/api/join`, dataToSubmit)
             .then(response => {
                 alert('회원가입 성공');
                 window.location.href = '/login';

@@ -10,11 +10,13 @@ const MovieListAdmin = () => {
     const navigate = useNavigate();
     const [isAuthorized, setIsAuthorized] = useState(false); // 권한 확인 상태
 
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
     // 사용자 정보 가져와서 role 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
+            console.log(API_URL);
             try {
-                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data; // 사용자 role 정보 확인
                 if (role === 'ROLE_ADMIN') {
                     setIsAuthorized(true);  // 권한이 있으면 true로 설정
@@ -37,7 +39,7 @@ const MovieListAdmin = () => {
         if (isAuthorized) {  // 관리자 권한이 있을 때만 영화 목록을 불러옴
             const fetchMovieList = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/api/list', {
+                    const response = await axios.get(`${API_URL}/api/list`, {
                         withCredentials: true,  // 쿠키나 인증 정보가 필요할 경우 추가
                     });
                     setMovieList(response.data);
@@ -69,7 +71,7 @@ const MovieListAdmin = () => {
     // 영화 알림 보내기 함수
     const handleMovieUpdate = async (id) => {
         try {
-            await axios.post(`http://localhost:8080/notify/movieupdate`, { movieId: id }, { withCredentials: true });
+            await axios.post(`${API_URL}/notify/movieupdate`, { movieId: id }, { withCredentials: true });
             alert('영화 알림이 성공적으로 전송되었습니다.');
         } catch (err) {
             console.error('Failed to send movie notification:', err);

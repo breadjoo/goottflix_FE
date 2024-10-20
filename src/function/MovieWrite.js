@@ -3,6 +3,7 @@ import { Form, Button, Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const MovieWrite = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -21,7 +22,7 @@ const MovieWrite = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+        const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
         const { role } = response.data; // 사용자 role 정보 확인
         if (role === 'ROLE_ADMIN') {
           setIsAuthorized(true);  // 권한이 있으면 true로 설정
@@ -54,7 +55,7 @@ const MovieWrite = () => {
       data.append(key, formData[key]);
     }
 
-    fetch('http://localhost:8080/api/movie/write', {
+    fetch(`${API_URL}/api/movie/write`, {
       method: 'POST',
       body: data,
     })

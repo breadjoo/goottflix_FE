@@ -6,12 +6,13 @@ import axios from 'axios';
 const AdminPage = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const navigate = useNavigate();
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 사용자 정보 가져와서 관리자 권한 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data;
 
                 if (role === 'ROLE_ADMIN') {

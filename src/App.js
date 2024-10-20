@@ -11,8 +11,6 @@ import UserProfile from "./function/UserProfile";
 import Signup from './function/SignUp';
 import NotificationComponent from "./function/NotificationComponent";
 import WatchMovie from "./function/WatchMovie";
-
-import Welcome from "./components/Welcome";
 import Description from "./function/Description";
 import EditProfile from "./function/EditProfile";
 import UserList from "./function/UserList";
@@ -26,6 +24,13 @@ import ChatLayout from './components/ChatLayout';
 import UsernameSetting from "./function/UsernameSetting";
 import MovieSearch from "./function/MovieSearch";
 import EditMovie from "./function/EditMovie";
+import MovieList from "./function/MovieList";
+import MyCommentList from "./function/MyCommentList";
+import FriendList from "./function/FriendList";
+import FriendProfile from "./function/FriendProfile";
+import FriendOfFriendList from "./function/FriendOfFriendList";
+import FriendCommentList from "./function/FriendCommentList";
+import FriendMovieList from "./function/FriendMovieList";
 
 function App() {
     return (
@@ -33,7 +38,6 @@ function App() {
             <div className="App">
                 <NotificationComponent />
                 <Navbar />
-                <Welcome />
                 <Routes>
                     {/* 메인 페이지 */}
                     <Route path="/" element={ <>
@@ -48,6 +52,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/auth/reset" element={<ResetPassword />} />
                     <Route path="/mypage" element={<UserProfile />} />
+                    <Route path="/friendPage/:friend_id" element={<FriendProfile />} />
                     <Route path="/editProfile" element={<EditProfile />} />
                     <Route path="/adminPage" element={<AdminPage />} />
                     <Route path="/userList" element={<UserList />} />
@@ -55,6 +60,12 @@ function App() {
                     <Route path="/movieListAdmin" element={<MovieListAdmin />} />
                     <Route path="/nfcData" element={<NfcData />} />
                     <Route path="/movieSearch" element={<MovieSearch />} />
+                    <Route path="/movieList" element={<MovieList />} />
+                    <Route path="/api/friend/review/:friendId" element={<FriendMovieList />} />
+                    <Route path="/myCommentList" element={<MyCommentList />} />
+                    <Route path="/myFriendList" element={<FriendList />} />
+                    <Route path="/friend/list/:friendId" element={<FriendOfFriendList />} />
+                    <Route path="/api/friend/comment/:friendId" element={<FriendCommentList />} />
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>

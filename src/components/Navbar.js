@@ -17,6 +17,8 @@ const Navbar = () => {
     const [unreadCount, setUnreadCount] = useState(0);
     const [notifications, setNotifications] = useState([]);
     const navigate = useNavigate();
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
 
     // 알림 팝업 토글
     const toggleNotifyPopup = () => {
@@ -56,7 +58,8 @@ const Navbar = () => {
 
     // 알림 개수 가져오기
     useEffect(() => {
-        axios.get('http://localhost:8080/notify/allnotify', {
+        console.log(API_URL);
+        axios.get(`${API_URL}/notify/allnotify`, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true,
         })
@@ -72,7 +75,7 @@ const Navbar = () => {
 
     // 백엔드에서 사용자 정보 가져오기 (role 포함)
     useEffect(() => {
-        axios.get('http://localhost:8080/api/user', { withCredentials: true })
+        axios.get(`${API_URL}/api/user`, { withCredentials: true })
             .then(response => {
                 setUsername(response.data.username); // 사용자 이름 설정
                 setRole(response.data.role); // 사용자 권한 설정
@@ -84,7 +87,8 @@ const Navbar = () => {
 
     // JWT 토큰 쿠키 삭제 함수
     const deleteCookie = (name) => {
-        document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.localhost};`;
+        const domain = window.location.hostname;  // 현재 호스트명 가져오기
+        document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain}; secure;`;
     };
 
     // 로그아웃 버튼 클릭 시 처리할 함수
@@ -93,7 +97,7 @@ const Navbar = () => {
         deleteCookie('Authorization');
 
         // 백엔드에 로그아웃 요청 보내기
-        axios.post('http://localhost:8080/api/logout', {}, { withCredentials: true })
+        axios.post(`${API_URL}/api/logout`, {}, { withCredentials: true })
             .then(() => {
                 setUsername(null); // 사용자 이름 상태 초기화
                 window.location.href = '/'; // 메인 페이지로 새로고침 후 리다이렉트

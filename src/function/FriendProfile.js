@@ -1,60 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
-import { Container, Row, Col, Card, Button, Image } from 'react-bootstrap';
-import { FaCog } from 'react-icons/fa'; // Settings icon
-import { Bar } from 'react-chartjs-2'; // Bar chart
+import { Container, Row, Col, Card, Image } from 'react-bootstrap';
+import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-const UserProfile = () => {
+const FriendProfile = () => {
     const [profile, setProfile] = useState(null);
     const [userRank, setUserRank] = useState(null);
+    const [commonMovies, setCommonMovies] = useState([]);
     const [error, setError] = useState('');
     const [userRatingCount, setUserRatingCount] = useState([]);
     const [allRatingCount, setAllRatingCount] = useState([]);
     const navigate = useNavigate();
+    const { friend_id } = useParams();
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
-    // 랜덤 이미지 배열
     const randomImages = [
-        '/images/아바타1.jpg',
-        '/images/아바타2.jpg',
-        '/images/아바타3.jpg',
-        '/images/아바타4.jpg',
-        '/images/아바타5.jpg',
-        '/images/아바타6.jpg',
-        '/images/아바타7.jpg',
-        '/images/아바타8.jpg',
-        '/images/아바타9.jpg',
+        '/images/아바타1.jpg', '/images/아바타2.jpg', '/images/아바타3.jpg',
+        '/images/아바타4.jpg', '/images/아바타5.jpg', '/images/아바타6.jpg',
+        '/images/아바타7.jpg', '/images/아바타8.jpg', '/images/아바타9.jpg',
         '/images/아바타10.jpg'
     ];
 
-    // 랜덤 이미지 선택 함수
     const getRandomImage = () => {
         const randomIndex = Math.floor(Math.random() * randomImages.length);
         return randomImages[randomIndex];
     };
 
-    const formatExpirationDate = (expiration) => {
-        if (!expiration) return '구독해주세요';
-        const date = new Date(expiration);
-        const year = date.getFullYear().toString().slice(2);
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        return `${year}년 ${month}월 ${day}일만료`;
-    };
-
     useEffect(() => {
-        const fetchProfile = async () => {
+        const fetchFriendProfile = async () => {
             try {
-                const response = await axios.get(`${API_URL}/user/profile`, {
+                const response = await axios.get(`${API_URL}/user/profile/${friend_id}`, {
                     withCredentials: true
                 });
                 setProfile(response.data.userProfile);
                 setUserRank(response.data.userRank);
+                setCommonMovies(response.data.commonMovie); // commonMovie 데이터 추가
 
                 const userRatingCountData = response.data.userRating.map(rating => rating.userRatingCount);
                 const allRatingCountData = response.data.userRating.map(rating => rating.allRatingCount);
@@ -62,16 +45,12 @@ const UserProfile = () => {
                 setUserRatingCount(userRatingCountData);
                 setAllRatingCount(allRatingCountData);
             } catch (err) {
-                setError('Failed to load user profile.');
+                setError('Failed to load friend profile.');
             }
         };
 
-        fetchProfile();
-    }, [API_URL]);
-
-    const handleUpdate = () => {
-        navigate('/editProfile');
-    };
+        fetchFriendProfile();
+    }, [API_URL, friend_id]);
 
     const handleNavigate = (path) => {
         navigate(path);
@@ -109,13 +88,8 @@ const UserProfile = () => {
         responsive: true,
         maintainAspectRatio: true,
         scales: {
-            x: {
-                stacked: false,
-            },
-            y: {
-                stacked: false,
-                beginAtZero: true,
-            },
+            x: { stacked: false },
+            y: { stacked: false, beginAtZero: true },
         },
     };
 
@@ -131,9 +105,6 @@ const UserProfile = () => {
         <Container className="my-5" style={{ maxWidth: '800px' }}>
             <Card className="shadow" style={{ backgroundColor: '#f8f9fa' }}>
                 <Card.Body className="text-center">
-                    <div className="d-flex justify-content-end">
-                        <FaCog style={{ fontSize: '24px', cursor: 'pointer' }} onClick={handleUpdate} />
-                    </div>
                     <Image
                         src={profile.profileImage ? `${API_URL}${profile.profileImage}` : getRandomImage()}
                         roundedCircle
@@ -143,33 +114,19 @@ const UserProfile = () => {
                     <h4>{profile.username}</h4>
                     <p style={{ color: 'gray' }}>{profile.email}</p>
                     <Row className="text-center mt-4">
-                        <Col onClick={() => handleNavigate('/myFriendList')} style={{ cursor: 'pointer' }}>
+                        <Col onClick={() => handleNavigate(`/friend/list/${friend_id}`)} style={{ cursor: 'pointer' }}>
                             <div><strong>{profile.friends || 0}</strong></div>
                             <div>친구</div>
                         </Col>
-                        <Col onClick={() => handleNavigate('/movieList')} style={{ cursor: 'pointer' }}>
+                        <Col onClick={() => handleNavigate(`/api/friend/review/${friend_id}`)} style={{ cursor: 'pointer' }}>
                             <div><strong>{profile.watched || 0}</strong></div>
                             <div>평가</div>
                         </Col>
-                        <Col onClick={() => handleNavigate('/myCommentList')} style={{ cursor: 'pointer' }}>
+                        <Col onClick={() => handleNavigate(`/api/friend/comment/${friend_id}`)} style={{ cursor: 'pointer' }}>
                             <div><strong>{profile.comment || 0}</strong></div>
                             <div>코멘트</div>
                         </Col>
                     </Row>
-                    <Row className="text-center mt-4">
-                        <Col>
-                            <div><strong>마지막 로그인</strong></div>
-                            <div><strong>{profile.lastLogin || ''}</strong></div>
-                        </Col>
-                        <Col>
-                            <div><strong>{profile.loginId || ''}</strong></div>
-                        </Col>
-                        <Col>
-                            <div><strong>{profile.subscribe || 0}</strong></div>
-                            <div>{formatExpirationDate(profile.expiration) || ''}</div>
-                        </Col>
-                    </Row>
-
                 </Card.Body>
             </Card>
 
@@ -179,8 +136,8 @@ const UserProfile = () => {
                     <h5 className="mb-4" style={{ fontWeight: 'bold', color: '#003857' }}>취향분석</h5>
                     <div className="mb-4 px-3 py-3 rounded" style={{ backgroundColor: '#f0f4f8', borderLeft: '4px solid #003857' }}>
                         <p className="mb-2" style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#333' }}>
-                            {profile.username}님은 goottflix 서비스 내 평가 순위 {userRank?.reviewRank}위로 <br/>
-                            <span className="text-primary"> 한국에서 영화를 즐기는 상위 {userRank?.reviewPercent}% 유저</span>입니다!
+                            {profile.username}님은 goottflix 서비스 내 평가 순위 {userRank?.reviewRank}위로 <br />
+                            <span className="text-primary"> 상위 {userRank?.reviewPercent}% 유저</span>입니다!
                         </p>
                         <p className="mb-2" style={{fontSize: '1.1rem', fontWeight: 'bold', color: '#333'}}>
                             {profile.username}님은 <span
@@ -197,8 +154,36 @@ const UserProfile = () => {
                 </Card.Body>
             </Card>
 
+            {/* 공통으로 본 영화 섹션 */}
+            <Card className="mt-4 shadow-sm" style={{ backgroundColor: '#fff' }}>
+                <Card.Body>
+                    <h5 className="mb-4" style={{ fontWeight: 'bold', color: '#003857' }}>친구와 나 둘다 재밌게 본 영화</h5>
+                    <Row>
+                        {commonMovies.map(movie => (
+                            <Col key={movie.movieId} xs={6} md={4} lg={3} className="mb-3">
+                                <Card className="shadow-sm" style={{ cursor: 'pointer' }}>
+                                    <Link to={`/description/`} state={{ movie: { id: movie.id } }}>
+                                    <Card.Img
+                                        variant="top"
+                                        src={movie.posterUrl ? `${API_URL}${movie.posterUrl}` : getRandomImage()}
+                                        style={{ height: '200px', objectFit: 'cover' }}
+                                        alt={movie.title}
+                                    />
+                                    </Link>
+                                    <Card.Body>
+                                        <Card.Title style={{ fontSize: '1rem', fontWeight: 'bold' }}>{movie.title}</Card.Title>
+                                        <Card.Text className="text-muted">
+                                            <small>내 평점: {movie.myRating} <br />친구 평점: {movie.friendRating}</small>
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                </Card.Body>
+            </Card>
         </Container>
     );
 };
 
-export default UserProfile;
+export default FriendProfile;

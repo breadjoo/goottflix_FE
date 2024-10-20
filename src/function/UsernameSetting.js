@@ -6,9 +6,11 @@ const UsernameSetting = () => {
     const [username, setUsername] = useState('');
     const [isUsernameValid, setIsUsernameValid] = useState(null); // 중복 확인 상태 저장
     const [errorMessage, setErrorMessage] = useState(''); // 에러 메시지 저장
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     const deleteCookie = (name) => {
-        document.cookie = `${name}=; Max-Age=0; path=/; domain=${window.location.localhost};`;
+        const domain = window.location.hostname;  // 현재 호스트명 가져오기
+        document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain}; secure;`;
     };
     // 유저네임 중복 체크 함수
     const checkUsernameAvailability = () => {
@@ -18,7 +20,7 @@ const UsernameSetting = () => {
             return;
         }
 
-        axios.post('http://localhost:8080/user/username/check', null, {
+        axios.post(`${API_URL}/user/username/check`, null, {
             params: {
                 username: username
             },
@@ -47,7 +49,7 @@ const UsernameSetting = () => {
             return;
         }
 
-        axios.post('http://localhost:8080/api/user/set-username', null, {  // 데이터 전송 대신 URL 파라미터로 전송
+        axios.post(`${API_URL}/api/user/set-username`, null, {  // 데이터 전송 대신 URL 파라미터로 전송
             params: {
                 username: username  // URL 파라미터로 전송
             },

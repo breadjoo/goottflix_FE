@@ -3,6 +3,7 @@ import '../css/ImageSlider.css';
 import axios from "axios"; // CSS 파일을 추가
 
 window.IMP.init("imp77446200");
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 const onClickPay = async () => {
     window.IMP.request_pay({
@@ -25,7 +26,7 @@ const onClickPay = async () => {
 
 const subscribe_success = async () => {
     try{
-        await axios.post("http://localhost:8080/api/subscribe",null,{
+        await axios.post(`${API_URL}/api/subscribe`,null,{
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -38,10 +39,15 @@ const subscribe_success = async () => {
 
 
 const images = [
+    '/images/기생충.jpg',
+    '/images/인사이드아웃.jpg',
+    '/images/너의이름은.jpg',
+    '/images/위플래시.jpg',
     '/images/에일리언.jpg',
+    '/images/인터스텔라.jpg',
     '/images/비틀쥬스.jpg',
-    '/images/인사이드아웃2.jpg',
     '/images/반지의제왕.jpg',
+    '/images/시네마천국.jpg'
 ];
 
 const ImageSlider = () => {
@@ -69,7 +75,8 @@ const ImageSlider = () => {
             <div className="overlay"></div>
             <div className="slider-content">
                 <h1>당신에게 최고의 영화는 무엇인가요?</h1>
-                <p>구트구트 플릭쯔 ~.</p>
+                <p>심심한데 뭐 볼만한거 없을까?</p>
+                {/*<p>마음에 드는 영화, 지금 리뷰하고 평가해보세요!</p>*/}
                 <button className="cta-button" onClick={onClickPay}>구독하기!</button>
             </div>
         </div>

@@ -15,12 +15,13 @@ function Description() {
     const [video, setVideo] = useState(null);
     const [subscribe, setSubscribe] = useState(false);
     const [isAuthorized, setIsAuthorized] = useState(false); // 관리자 권한 확인 상태 추가
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 사용자 정보 가져와서 role 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data; // 사용자 role 정보 확인
                 if (role === 'ROLE_ADMIN') {
                     setIsAuthorized(true);  // 권한이 있으면 true로 설정
@@ -44,12 +45,12 @@ function Description() {
 
             try {
                 // 리뷰 가져오기
-                const reviewResponse = await axios.get(`http://localhost:8080/api/review?movieId=${movie.id}`,{
+                const reviewResponse = await axios.get(`${API_URL}/api/review?movieId=${movie.id}`,{
                     withCredentials: true  // 쿠키 포함
                 });
                 setReviews(reviewResponse.data || []);
 
-                const getSubscribe = await axios.get(`http://localhost:8080/api/userSubscribe`, {
+                const getSubscribe = await axios.get(`${API_URL}/api/userSubscribe`, {
                     withCredentials: true
                 });
                 setSubscribe(getSubscribe.data === true);
@@ -89,7 +90,7 @@ function Description() {
         }
 
         try {
-            await axios.post('http://localhost:8080/api/review', null, {
+            await axios.post(`${API_URL}/api/review`, null, {
                 params: { movieId, rating, review },
                 headers: {
                     'Content-Type': 'application/json'
@@ -107,7 +108,7 @@ function Description() {
 
     const recommendReview = async (reviewId) =>{
         try{
-            await axios.post('http://localhost:8080/api/recommendUp', null,{
+            await axios.post(`${API_URL}/api/recommendUp`, null,{
                 params:{reviewId},
                 headers: {
                     'Content-Type': 'application/json'
@@ -122,7 +123,7 @@ function Description() {
 
     const declaration = async (reviewId) => {
         try{
-            await  axios.post('http://localhost:8080/api/declaration',null,{
+            await  axios.post(`${API_URL}/api/declaration`,null,{
                 params:{reviewId},
                 headers: {
                     'Content-Type': 'application/json'
@@ -153,7 +154,7 @@ function Description() {
             return;
         }
         try {
-            await axios.delete(`http://localhost:8080/api/movie/delete/${movie.id}`, {
+            await axios.delete(`${API_URL}/api/movie/delete/${movie.id}`, {
                 withCredentials: true
             });
             alert('영화가 삭제되었습니다.');
@@ -172,7 +173,7 @@ function Description() {
             <div className="row">
                 <div className="col-md-4">
                     <img
-                        src={`http://localhost:8080${movie.posterUrl}`}
+                        src={`${API_URL}${movie.posterUrl}`}
                         alt={movie.posterUrl}
                         className="img-fluid rounded shadow"
                     />

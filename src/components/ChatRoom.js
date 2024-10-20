@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import '../css/ChatRoom.css';  // 필요하면 CSS 파일 경로에 맞게 수정하세요
 
+function ChatRoom({ roomId }) {  // props로 roomId 받기
 function ChatRoom({ roomId }) {
     const [messages, setMessages] = useState([]);  // 채팅 메시지 목록
     const [stompClient, setStompClient] = useState(null);  // WebSocket 클라이언트
@@ -13,6 +14,7 @@ function ChatRoom({ roomId }) {
     const [image, setImage] = useState(null);  // 업로드된 이미지 URL
     const messageEndRef = useRef(null);  // 스크롤 제어를 위한 ref
     const fileInputRef = useRef(null);  // 파일 선택 input을 참조하는 ref
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 채팅 메시지 목록을 받아왔을 때 스크롤을 맨 아래로 이동시키는 함수
     const scrollToBottom = () => {
@@ -31,22 +33,22 @@ function ChatRoom({ roomId }) {
         if (!roomId) return;
 
         // 채팅방 이름 가져오기
-        axios.get(`http://localhost:8080/api/chatroom/${roomId}/name`)
+        axios.get(`${API_URL}/api/chatroom/${roomId}/name`)
             .then(response => setRoomName(response.data))
             .catch(error => console.log("채팅방 이름을 가져오는데 실패함", error));
 
         // 현재 유저 정보 가져오기
-        axios.get("http://localhost:8080/api/chatroom/getusername", { withCredentials: true })
+        axios.get(`${API_URL}/api/chatroom/getusername`, { withCredentials: true })
             .then(response => setSender(response.data.username))
             .catch(error => console.error("Error fetching user information:", error));
 
         // 기존 메시지 목록 가져오기
-        axios.get(`http://localhost:8080/api/message/${roomId}`)
+        axios.get(`${API_URL}/api/message/${roomId}`)
             .then(response => setMessages(response.data))
             .catch(error => console.error('Error fetching messages:', error));
 
         // WebSocket 연결 설정
-        const socket = new SockJS('http://localhost:8080/ws/chat');
+        const socket = new SockJS(`${API_URL}/ws/chat`);
         const client = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,

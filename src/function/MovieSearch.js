@@ -14,6 +14,7 @@ function MovieSearch() {
     const [director, setDirector] = useState('');
     const [sortBy, setSortBy] = useState('rating'); // 기본 정렬은 평점순
     const [ratings, setRatings] = useState({}); // 각 영화에 대한 별점 상태 관리
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 장르 옵션
     const genreOptions = [
@@ -48,7 +49,7 @@ function MovieSearch() {
                 params.sortBy = sortBy;
             }
 
-            const response = await axios.get('http://localhost:8080/api/search', {
+            const response = await axios.get(`${API_URL}/api/search`, {
                 withCredentials: true,
                 params: params
             });
@@ -77,7 +78,7 @@ function MovieSearch() {
         }
 
         try {
-            await axios.post('http://localhost:8080/api/review', null, {
+            await axios.post(`${API_URL}/api/review`, null, {
                 params: { movieId, rating },
                 headers: {
                     'Content-Type': 'application/json'
@@ -156,7 +157,7 @@ function MovieSearch() {
                 {movies.map(movie => (
                     <Col xs={12} sm={6} md={3} key={movie.id} className="movie-card mb-4">
                         <Card style={{width: '100%', backgroundColor: '#001f3f', color: 'white'}}>
-                            <Card.Img variant="top" src={"http://localhost:8080" + movie.posterUrl}/>
+                            <Card.Img variant="top" src={`${API_URL}` + movie.posterUrl}/>
                             <Card.Body>
                                 <Card.Title>{movie.title}</Card.Title>
                                 <Card.Text>{movie.intro}</Card.Text>

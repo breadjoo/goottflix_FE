@@ -10,12 +10,13 @@ const UserList = () => {
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
     const navigate = useNavigate();
     const [isAuthorized, setIsAuthorized] = useState(false); // 권한 확인 상태
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     // 사용자 정보 가져와서 role 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/user', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data; // 사용자 role 정보 확인
                 if (role === 'ROLE_ADMIN') {
                     setIsAuthorized(true);  // 권한이 있으면 true로 설정
@@ -38,7 +39,7 @@ const UserList = () => {
         if (isAuthorized) {  // 관리자 권한이 있을 때만 유저 목록을 불러옴
             const fetchUserList = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/admin/userList', {
+                    const response = await axios.get(`${API_URL}/admin/userList`, {
                         withCredentials: true,  // 쿠키나 인증 정보가 필요할 경우 추가
                     });
                     setUserList(response.data);
@@ -76,8 +77,8 @@ const UserList = () => {
     const handleRoleChange = async (id, currentRole) => {
         try {
             const endpoint = currentRole === 'ROLE_ADMIN'
-                ? 'http://localhost:8080/admin/setUser'  // 회원으로 변경
-                : 'http://localhost:8080/admin/setAdmin'; // 관리자로 변경
+                ? `${API_URL}/admin/setUser`  // 회원으로 변경
+                : `${API_URL}/admin/setAdmin`; // 관리자로 변경
 
             await axios.post(endpoint, { id }, { withCredentials: true });
 

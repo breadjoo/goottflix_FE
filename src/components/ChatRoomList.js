@@ -6,16 +6,20 @@ import '../css/ChatRoomList.css';
 function ChatRoomList({ setSelectedRoomId }) {
     const [chatRooms, setChatRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/chatroom')
+        axios.get(`${API_URL}/api/chatroom`)
             .then(response => {
-                setChatRooms(response.data);
+                // 응답 데이터가 배열인지 확인 후 설정
+                setChatRooms(Array.isArray(response.data) ? response.data : []);
             })
             .catch(error => {
                 console.error('Error fetching chat rooms:', error);
+                setChatRooms([]); // 에러 시 빈 배열로 설정
             });
     }, []);
+
 
     const createChatRoom = () => {
         if (!newRoomName.trim()) {
@@ -23,7 +27,7 @@ function ChatRoomList({ setSelectedRoomId }) {
             return;
         }
 
-        axios.post('http://localhost:8080/api/chatroom/createroom', { name: newRoomName })
+        axios.post(`${API_URL}/api/chatroom/createroom`, { name: newRoomName })
             .then(response => {
                 const createdRoom = response.data;
                 setChatRooms(prevRooms => [...prevRooms, createdRoom]);
@@ -40,12 +44,13 @@ function ChatRoomList({ setSelectedRoomId }) {
                 <h2>채팅방 목록</h2>
             </div>
             <ul className="chatroom-list">
-                {chatRooms.map(room => (
+                {Array.isArray(chatRooms) && chatRooms.map(room => (
                     <li key={room.id} className="chatroom-item" onClick={() => setSelectedRoomId(room.id)}>
                         <span>{room.name}</span>
                     </li>
                 ))}
             </ul>
+
             <div className="chatroom-create-container">
                 <input
                     type="text"

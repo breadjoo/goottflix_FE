@@ -7,11 +7,13 @@ function WatchMovie() {
     const location = useLocation();
     const movie = location.state?.movie;
     const [subscribe, setSubscribe] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
 
     useEffect(() => {
         const fetch = async () => {
             try {
-                const getSubscribe = await axios.get(`http://localhost:8080/api/userSubscribe`, {
+                const getSubscribe = await axios.get(`${API_URL}/api/userSubscribe`, {
                     withCredentials: true  // 쿠키 포함
                 });
                 setSubscribe(getSubscribe.data === true);

@@ -10,6 +10,7 @@ function Login() {
 
     const [showForgotModal, setShowForgotModal] = useState(false); // 모달 상태
     const [email, setEmail] = useState(''); // 이메일 입력 상태
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     const handleChange = (e) => {
         setFormData({
@@ -21,7 +22,7 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/api/login', formData, {
+        axios.post(`${API_URL}/api/login`, formData, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -38,20 +39,20 @@ function Login() {
     };
 
     const onNaverLogin = () => {
-        window.location.href = "http://localhost:8080/oauth2/authorization/naver";
+        window.location.href = `${API_URL}/oauth2/authorization/naver`;
     };
 
     const onGoogleLogin = () => {
-        window.location.href = "http://localhost:8080/oauth2/authorization/google";
+        window.location.href = `${API_URL}/oauth2/authorization/google`;
     };
 
     const onKakaoLogin = () => {
-        window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+        window.location.href = `${API_URL}/oauth2/authorization/kakao`;
     };
 
     const testAxiosRequest = () => {
         axios
-            .get("http://localhost:8080/test", { withCredentials: true })
+            .get(`${API_URL}/test`, { withCredentials: true })
             .then((res) => {
                 alert(JSON.stringify(res.data));
             })
@@ -59,7 +60,7 @@ function Login() {
     };
 
     const handleForgotPassword = () => {
-        axios.post('http://localhost:8080/auth/forgot', null, {
+        axios.post(`${API_URL}/auth/forgot`, null, {
             params: { email }, // email 파라미터를 params로 전달
         })
             .then((response) => {
