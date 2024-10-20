@@ -24,7 +24,6 @@ import NfcData from "./function/NfcData";
 import ResetPassword from "./function/ResetPassword";
 import ChatLayout from './components/ChatLayout';
 
-
 function App() {
     return (
         <Router>
