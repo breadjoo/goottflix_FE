@@ -3,6 +3,7 @@ import { Link ,useNavigate } from 'react-router-dom';
 import '../css/Navbar.css'; // CSS 파일 임포트
 import NotifyPopup from "./NotifyPopup";
 import FriendPopup from "./Friend"; // 친구 팝업 컴포넌트 임포트
+import NotificationComponent from "../function/NotificationComponent";
 import axios from "axios";
 
 
@@ -193,6 +194,11 @@ const Navbar = () => {
                                     <NotifyPopup isOpen={isNotifyPopupOpen} popupRef={notifyPopupRef}
                                                  setUnreadCount={setUnreadCount} notifications={notifications}/>
                                 </li>
+
+                                <NotificationComponent
+                                    setUnreadCount={setUnreadCount}
+                                    setNotifications={setNotifications}
+                                />
 
                                 {/* 친구 관리 아이콘 */}
                                 <li className="nav-item">

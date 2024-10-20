@@ -1,3 +1,5 @@
+/*chatroom*/
+
 .chat-container {
     width: 100%; /* 채팅 컨테이너를 부모의 너비에 맞춤 */
     margin: 0;
@@ -84,4 +86,11 @@
 
 .message-right .timestamp {
     text-align: left;
+}
+
+.chat-image {
+    max-width: 200px;  /* 원하는 최대 너비로 설정 */
+    max-height: 200px; /* 원하는 최대 높이로 설정 */
+    width: auto;
+    height: auto;
 }

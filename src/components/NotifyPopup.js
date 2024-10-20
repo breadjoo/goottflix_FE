@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
@@ -88,7 +89,8 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
                                 className="notification-icon"
                             />
                             <div className="notification-content">
-                                <Link to={notify.url} state={{ movie: { id: notify.movieId } }}>
+
+                                <Link to ={notify.url} state={{movie : {id: notify.movieId} }}>
                                     {notify.content}
                                 </Link>
                             </div>
