@@ -78,8 +78,8 @@ function MovieCard() {
         window.location.reload();
     };
 
-    const movie_Description = async (movie) => {
-        navigate("/description", { state: { movie } });
+    const movie_Description = async (movieId) => {
+        navigate("/description", { state: { movieId }});
     };
 
     const loadMoreMovies = () => {
@@ -120,7 +120,7 @@ function MovieCard() {
                         </ListGroup>
                         <ListGroup.Item style={{ backgroundColor: '#001f3f', color: 'white' }}>영화 별점 : {movie.rating}</ListGroup.Item>
                         <Card.Body className="d-flex justify-content-between">
-                            <Button variant="outline-light" onClick={() => movie_Description(movie)}>영화 상세</Button>
+                            <Button variant="outline-light" onClick={() => movie_Description(movie.id)}>영화 상세</Button>
                             <Button variant="outline-light" onClick={() => submitRating(movie.id)}>별점 주기</Button>
                         </Card.Body>
                     </Card>

@@ -8,7 +8,8 @@ import '../css/Description.css';
 function Description() {
     const navigate = useNavigate();
     const location = useLocation();
-    const movie = location.state?.movie;
+    const movieId = location.state?.movieId;
+    const [movie, setMovie] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [ratings, setRatings] = useState({});
     const [review, setReview] = useState('');
@@ -17,8 +18,10 @@ function Description() {
     const [isAuthorized, setIsAuthorized] = useState(false); // 관리자 권한 확인 상태 추가
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
-    // 사용자 정보 가져와서 role 확인
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
+        // 사용자 정보 가져와서 role 확인
         const fetchUserInfo = async () => {
             try {
                 const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
@@ -35,44 +38,52 @@ function Description() {
             }
         };
 
-        fetchUserInfo();
-    }, [navigate]);
-
-    useEffect(() => {
         const fetchData = async () => {
-            if (!movie || !movie.id) return;
-            console.log("현재 영화 객체:", movie);  // movie 객체가 제대로 있는지 확인
-
+            setLoading(true);
             try {
                 // 리뷰 가져오기
-                const reviewResponse = await axios.get(`${API_URL}/api/review?movieId=${movie.id}`,{
+                const response = await axios.get(`${API_URL}/api/description`, {
+                    params: {movieId},
                     withCredentials: true  // 쿠키 포함
                 });
-                setReviews(reviewResponse.data || []);
-
-                const getSubscribe = await axios.get(`${API_URL}/api/userSubscribe`, {
-                    withCredentials: true
-                });
-                setSubscribe(getSubscribe.data === true);
-
-                const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
-                    params: {
-                        part: 'snippet',
-                        q: movie.videoUrl,
-                        key: 'AIzaSyBhy1AR1O0Poc0383mS2yueYn3EfzoEW94',
-                        type: 'video',
-                        regionCode: 'kr'
-                    }
-                });
-                if (videoResponse.data.items.length > 0) {
-                    setVideo(videoResponse.data.items[0]);
-                }
+                setMovie(response.data.movie || []);
+                setReviews(response.data.reviews || []);
+                setSubscribe(response.data.isSubscribe);
             } catch (err) {
                 alert('데이터를 가져오는 중 오류가 발생했습니다: ' + err.message);
+            }finally {
+                setLoading(false);
             }
         };
 
-        void fetchData();
+        fetchUserInfo();
+        fetchData();
+
+    }, [movieId]);
+
+    useEffect(() => {
+        if(movie.videoUel){
+            const fetchVideo = async () => {
+                try{
+                    const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+                        params: {
+                            part: 'snippet',
+                            q: movie.videoUrl,
+                            key: 'AIzaSyBhy1AR1O0Poc0383mS2yueYn3EfzoEW94',
+                            type: 'video',
+                            regionCode: 'kr'
+                        }
+                    });
+                    if (videoResponse.data.items.length > 0) {
+                        setVideo(videoResponse.data.items[0]);
+                    }
+                }catch (err){
+                    alert("비디오 불러오기 실패"+err.message);
+                }
+            }
+
+            fetchVideo();
+        }
     }, [movie]);
 
     const handleRatingChange = (movieId, rating) => {
@@ -270,7 +281,8 @@ function Description() {
             <div className="row mt-5">
                 <div className="col-md-12">
                     <h4>리뷰 목록</h4>
-                    {reviews.map((re, index) => (
+                    {
+                        reviews.map((re, index) => (
                         re.review.review && (
                             <div key={index} className="card p-3 mb-3 shadow">
                                 <p>아이디 : {re.nickname}</p>

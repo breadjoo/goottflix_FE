@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {Link} from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     const [notifications, setNotifications] = useState([]);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isOpen) {
@@ -67,6 +67,12 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
             });
     };
 
+    const handleNavigate = (notify) => {
+        return() => {
+            navigate(notify.url, { state: { movieId: notify.movieId }});
+        };
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -90,9 +96,9 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
                             />
                             <div className="notification-content">
 
-                                <Link to ={notify.url} state={{movie : {id: notify.movieId} }}>
+                                <p onClick={handleNavigate(notify)} style={{ cursor: 'pointer' }}>
                                     {notify.content}
-                                </Link>
+                                </p>
                             </div>
                             <img
                                 src='/deleteicon.png'

@@ -4,7 +4,6 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import '../css/ChatRoom.css';  // 필요하면 CSS 파일 경로에 맞게 수정하세요
 
-function ChatRoom({ roomId }) {  // props로 roomId 받기
 function ChatRoom({ roomId }) {
     const [messages, setMessages] = useState([]);  // 채팅 메시지 목록
     const [stompClient, setStompClient] = useState(null);  // WebSocket 클라이언트
