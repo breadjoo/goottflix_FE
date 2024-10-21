@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../css/ChatRoomList.css';
@@ -6,20 +5,29 @@ import '../css/ChatRoomList.css';
 function ChatRoomList({ setSelectedRoomId }) {
     const [chatRooms, setChatRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
+    const [userRole, setUserRole] = useState('');  // 사용자 역할 상태
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     useEffect(() => {
+        // 채팅방 목록 가져오기
         axios.get(`${API_URL}/api/chatroom`)
             .then(response => {
-                // 응답 데이터가 배열인지 확인 후 설정
                 setChatRooms(Array.isArray(response.data) ? response.data : []);
             })
             .catch(error => {
                 console.error('Error fetching chat rooms:', error);
-                setChatRooms([]); // 에러 시 빈 배열로 설정
+                setChatRooms([]);  // 에러 시 빈 배열로 설정
+            });
+
+        // 사용자 역할 가져오기
+        axios.get(`${API_URL}/api/chatroom/getRole`, { withCredentials: true })
+            .then(response => {
+                setUserRole(response.data);  // 사용자 권한 설정
+            })
+            .catch(error => {
+                console.error('Error fetching user role:', error);
             });
     }, []);
-
 
     const createChatRoom = () => {
         if (!newRoomName.trim()) {
@@ -38,6 +46,18 @@ function ChatRoomList({ setSelectedRoomId }) {
             });
     };
 
+    const deleteChatRoom = (roomId) => {
+        if (window.confirm("정말로 이 채팅방을 삭제하시겠습니까?")) {
+            axios.delete(`${API_URL}/api/chatroom/${roomId}`)
+                .then(() => {
+                    setChatRooms(prevRooms => prevRooms.filter(room => room.id !== roomId));
+                })
+                .catch(error => {
+                    console.error('Error deleting chat room:', error);
+                });
+        }
+    };
+
     return (
         <div className="chatroom-list-container">
             <div className="chatroom-header">
@@ -45,8 +65,14 @@ function ChatRoomList({ setSelectedRoomId }) {
             </div>
             <ul className="chatroom-list">
                 {Array.isArray(chatRooms) && chatRooms.map(room => (
-                    <li key={room.id} className="chatroom-item" onClick={() => setSelectedRoomId(room.id)}>
-                        <span>{room.name}</span>
+                    <li key={room.id} className="chatroom-item">
+                        <span onClick={() => setSelectedRoomId(room.id)}>{room.name}</span>
+                        {/* ROLE_ADMIN인 경우에만 삭제 버튼 보이기 */}
+                        {userRole === 'ROLE_ADMIN' && (
+                            <button className="delete-button" onClick={() => deleteChatRoom(room.id)}>
+                                삭제
+                            </button>
+                        )}
                     </li>
                 ))}
             </ul>
