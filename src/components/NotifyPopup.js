@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {Link} from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
@@ -38,13 +37,14 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
             .then(() => {
                 // 알림을 읽음 처리 후 로컬 상태에서 읽음 여부를 업데이트
                 setNotifications(prevNotifications =>
-                    prevNotifications.map(notification =>
+                    Array.isArray(prevNotifications) ? prevNotifications.map(notification =>
                         notification.id === notifyId ? { ...notification, isRead: true } : notification
-                    )
+                    ) : []
                 );
-                // 읽지 않은 알림 수 업데이트
-                setUnreadCount(prevNotifications =>
-                    prevNotifications.filter(notify => !notify.isRead).length
+
+                // 읽지 않은 알림 수를 새로 계산해서 업데이트
+                setUnreadCount(notifications =>
+                    Array.isArray(notifications) ? notifications.filter(notify => !notify.isRead).length : 0
                 );
             })
             .catch(error => {
