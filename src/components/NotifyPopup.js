@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
     const [notifications, setNotifications] = useState([]);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isOpen) {
@@ -37,13 +38,14 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
             .then(() => {
                 // 알림을 읽음 처리 후 로컬 상태에서 읽음 여부를 업데이트
                 setNotifications(prevNotifications =>
-                    prevNotifications.map(notification =>
+                    Array.isArray(prevNotifications) ? prevNotifications.map(notification =>
                         notification.id === notifyId ? { ...notification, isRead: true } : notification
-                    )
+                    ) : []
                 );
-                // 읽지 않은 알림 수 업데이트
-                setUnreadCount(prevNotifications =>
-                    prevNotifications.filter(notify => !notify.isRead).length
+
+                // 읽지 않은 알림 수를 새로 계산해서 업데이트
+                setUnreadCount(notifications =>
+                    Array.isArray(notifications) ? notifications.filter(notify => !notify.isRead).length : 0
                 );
             })
             .catch(error => {
@@ -64,6 +66,12 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
             .catch(error => {
                 console.error('알림 삭제 실패', error);
             });
+    };
+
+    const handleNavigate = (notify) => {
+        return() => {
+            navigate(notify.url, { state: { movieId: notify.movieId }});
+        };
     };
 
     if (!isOpen) return null;
@@ -89,9 +97,9 @@ const NotifyPopup = ({ isOpen, popupRef, setUnreadCount }) => {
                             />
                             <div className="notification-content">
 
-                                <Link to ={notify.url} state={{movie : {id: notify.movieId} }}>
+                                <p onClick={handleNavigate(notify)} style={{ cursor: 'pointer' }}>
                                     {notify.content}
-                                </Link>
+                                </p>
                             </div>
                             <img
                                 src='/deleteicon.png'
