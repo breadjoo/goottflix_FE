@@ -13,6 +13,7 @@ const MovieWrite = () => {
     genre: '',
     director: '',
     file: null,
+    videoUrl: '',
     nation: '',
   });
   const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태
@@ -175,6 +176,17 @@ const MovieWrite = () => {
                 name="nation"
                 placeholder="국가"
                 value={formData.nation}
+                onChange={handleChange}
+                required
+            />
+          </Form.Group>
+          <Form.Group controlId="formVideoUrl" className="mt-3">
+            <Form.Label>예고편주소</Form.Label>
+            <Form.Control
+                type="text"
+                name="videoUrl"
+                placeholder="예고편주소"
+                value={formData.videoUrl}
                 onChange={handleChange}
                 required
             />

@@ -12,6 +12,7 @@ const EditMovie = () => {
         genre: '',
         director: '',
         file: null,
+        videoUrl: '',
         nation: '',
     });
     const [isAuthorized, setIsAuthorized] = useState(false);  // 권한 확인 상태

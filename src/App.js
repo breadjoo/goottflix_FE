@@ -56,7 +56,7 @@ function App() {
                     <Route path="/editProfile" element={<EditProfile />} />
                     <Route path="/adminPage" element={<AdminPage />} />
                     <Route path="/userList" element={<UserList />} />
-                    <Route path="/movieWrite" element={<MovieWrite />} />
+                    <Route path="/movieWrite" element={<MovieWrite />} />c
                     <Route path="/movieListAdmin" element={<MovieListAdmin />} />
                     <Route path="/nfcData" element={<NfcData />} />
                     <Route path="/movieSearch" element={<MovieSearch />} />
