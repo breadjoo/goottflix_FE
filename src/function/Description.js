@@ -62,7 +62,7 @@ function Description() {
     }, [movieId]);
 
     useEffect(() => {
-        if(movie.videoUel){
+        if(movie.videoUrl){
             const fetchVideo = async () => {
                 try{
                     const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {

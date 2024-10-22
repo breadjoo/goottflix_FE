@@ -11,10 +11,8 @@ const MovieListAdmin = () => {
     const [isAuthorized, setIsAuthorized] = useState(false); // 권한 확인 상태
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
-    // 사용자 정보 가져와서 role 확인
     useEffect(() => {
         const fetchUserInfo = async () => {
-            console.log(API_URL);
             try {
                 const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
                 const { role } = response.data; // 사용자 role 정보 확인
@@ -30,7 +28,6 @@ const MovieListAdmin = () => {
                 navigate('/login');  // 로그인 정보가 없으면 로그인 페이지로 리디렉션
             }
         };
-
         fetchUserInfo();  // 컴포넌트 마운트 시 사용자 정보 확인
     }, [navigate]);
 
