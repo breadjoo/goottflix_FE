@@ -31,6 +31,7 @@ import FriendProfile from "./function/FriendProfile";
 import FriendOfFriendList from "./function/FriendOfFriendList";
 import FriendCommentList from "./function/FriendCommentList";
 import FriendMovieList from "./function/FriendMovieList";
+import NoticeWrite from "./function/NoticeWrite";
 
 function App() {
     return (
@@ -56,7 +57,7 @@ function App() {
                     <Route path="/editProfile" element={<EditProfile />} />
                     <Route path="/adminPage" element={<AdminPage />} />
                     <Route path="/userList" element={<UserList />} />
-                    <Route path="/movieWrite" element={<MovieWrite />} />c
+                    <Route path="/movieWrite" element={<MovieWrite />} />
                     <Route path="/movieListAdmin" element={<MovieListAdmin />} />
                     <Route path="/nfcData" element={<NfcData />} />
                     <Route path="/movieSearch" element={<MovieSearch />} />
@@ -66,6 +67,9 @@ function App() {
                     <Route path="/myFriendList" element={<FriendList />} />
                     <Route path="/friend/list/:friendId" element={<FriendOfFriendList />} />
                     <Route path="/api/friend/comment/:friendId" element={<FriendCommentList />} />
+
+                    <Route path="/noticeWrite" element={<NoticeWrite />} />
+
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/description" element={<Description/>}/>

@@ -26,6 +26,8 @@ const MovieWrite = () => {
         const response = await axios.get(`${API_URL}/api/user`, { withCredentials: true });
         const { role } = response.data; // 사용자 role 정보 확인
         if (role === 'ROLE_ADMIN') {
+          console.log("----");
+          console.log(role);
           setIsAuthorized(true);  // 권한이 있으면 true로 설정
         } else {
           alert('접근 권한이 없습니다.');

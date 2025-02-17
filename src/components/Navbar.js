@@ -153,6 +153,7 @@ const Navbar = () => {
                         {/* 로그인 여부에 따른 버튼 조건부 렌더링 */}
                         {username ? (
                             <>
+
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/movieSearch" onClick={closeMenu}>영화검색</Link>
                                 </li>
@@ -161,6 +162,9 @@ const Navbar = () => {
                                 </li>
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link" onClick={handleLogout}>로그아웃</button>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/noticeWrite" onClick={closeMenu}>공지사항 작성</Link>
                                 </li>
 
                                 {/* 관리자 페이지는 role이 'ROLE_ADMIN'일 때만 표시 */}
