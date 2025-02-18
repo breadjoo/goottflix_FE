@@ -32,6 +32,7 @@ import FriendOfFriendList from "./function/FriendOfFriendList";
 import FriendCommentList from "./function/FriendCommentList";
 import FriendMovieList from "./function/FriendMovieList";
 import NoticeWrite from "./function/NoticeWrite";
+import NoticeBoard from "./function/NoticeBoard";
 
 function App() {
     return (
@@ -69,6 +70,8 @@ function App() {
                     <Route path="/api/friend/comment/:friendId" element={<FriendCommentList />} />
 
                     <Route path="/noticeWrite" element={<NoticeWrite />} />
+                    <Route path="/noticeBoard" element={<NoticeBoard />} />
+
 
                     {/* 회원가입 페이지 */}
                     <Route path="/signup" element={<Signup />} />
