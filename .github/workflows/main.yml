@@ -1,0 +1,53 @@
+name: Deploy React to Amazon EC2
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    name: Deploy React
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build React App
+        run: |
+          echo "REACT_APP_API_URL=http://backend:8080" > .env
+          npm install
+          npm run build
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build & Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ secrets.DOCKER_REPO_FE }}:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            sudo docker ps -qa | xargs -r sudo docker rm -f
+            sudo docker pull ${{ secrets.DOCKER_REPO_FE }}:latest
+            sudo docker pull ${{ secrets.DOCKER_REPO_BE }}:latest
+            sudo docker-compose up -d
+            sudo docker image prune -f
