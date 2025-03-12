@@ -20,7 +20,7 @@ jobs:
 
       - name: Build React App
         run: |
-          echo "REACT_APP_API_URL=http://backend:8080" > .env
+          export REACT_APP_API_URL=http://backend:8080
           npm install
           npm run build
 
