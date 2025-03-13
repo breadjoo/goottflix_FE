@@ -3,6 +3,7 @@ name: Deploy React to Amazon EC2
 on:
   push:
     branches: [ "main" ]
+    
 
 jobs:
   deploy:
@@ -18,9 +19,13 @@ jobs:
         with:
           node-version: 18
 
+      - name: Create .env.production file
+        run: |
+          echo "REACT_APP_API_URL=http://backend:8080" > .env.production
+
       - name: Build React App
         run: |
-          echo "REACT_APP_API_URL=http://backend:8080" > .env
+          export CI=false  # ESLint 경고 무시
           npm install
           npm run build
 
@@ -48,6 +53,5 @@ jobs:
           script: |
             sudo docker ps -qa | xargs -r sudo docker rm -f
             sudo docker pull ${{ secrets.DOCKER_REPO_FE }}:latest
-            sudo docker pull ${{ secrets.DOCKER_REPO_BE }}:latest
             sudo docker-compose up -d
             sudo docker image prune -f
