@@ -21,7 +21,7 @@ jobs:
 
       - name: Create .env.production file
         run: |
-          echo "REACT_APP_API_URL=http://backend:8080" > .env.production
+          echo "REACT_APP_API_URL=/api" > .env.production
 
       - name: Build React App
         run: |
