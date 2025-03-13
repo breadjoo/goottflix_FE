@@ -35,6 +35,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Check nginx.conf file
+        run: ls -l nginx.conf
+
+
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v6
         with:
