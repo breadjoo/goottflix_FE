@@ -55,7 +55,14 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            echo "✅ 기존 컨테이너 중지 및 삭제"
             sudo docker ps -qa | xargs -r sudo docker rm -f
+            
+            echo "✅ 사용하지 않는 Docker 이미지 정리"
+            sudo docker image prune -f  # 사용되지 않는 이미지 삭제 (최신 이미지 다운로드 전에 실행)
+
+            echo "✅ 최신 Docker 이미지 가져오기"
             sudo docker pull ${{ secrets.DOCKER_REPO_FE }}:latest
+
+            echo "✅ 새로운 컨테이너 실행"
             sudo docker compose up -d
-            sudo docker image prune -f
