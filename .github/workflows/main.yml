@@ -27,6 +27,7 @@ jobs:
           export CI=false  # ESLint 경고 무시
           npm install
           npm run build
+          ls -l build
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
