@@ -38,6 +38,7 @@ jobs:
         run: ls -l nginx.conf
 
 
+
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v6
         with:
@@ -56,5 +57,5 @@ jobs:
           script: |
             sudo docker ps -qa | xargs -r sudo docker rm -f
             sudo docker pull ${{ secrets.DOCKER_REPO_FE }}:latest
-            sudo docker-compose up -d
+            sudo docker compose up -d
             sudo docker image prune -f
