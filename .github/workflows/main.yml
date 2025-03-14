@@ -3,7 +3,6 @@ name: Deploy React to Amazon EC2
 on:
   push:
     branches: [ "main" ]
-    
 
 jobs:
   deploy:
