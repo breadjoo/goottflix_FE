@@ -7,7 +7,7 @@ RUN npm install
 COPY . .
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
-RUN npm run build
+RUN npm run build && ls -l /app/build
 
 # 2️⃣ Nginx를 사용하여 정적 파일 서빙
 FROM nginx:alpine

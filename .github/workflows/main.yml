@@ -67,3 +67,10 @@ jobs:
 
             echo "✅ 새로운 컨테이너 실행"
             sudo docker compose up -d
+
+      - name: Check Built Files in Container
+        run: |
+          sudo docker create --name temp-container ${{ secrets.DOCKER_REPO_FE }}:latest
+          sudo docker cp temp-container:/usr/share/nginx/html /tmp/html
+          ls -l /tmp/html
+          sudo docker rm temp-container
