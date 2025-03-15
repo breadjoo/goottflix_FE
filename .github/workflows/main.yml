@@ -20,7 +20,7 @@ jobs:
 
       - name: Create .env.production file
         run: |
-          echo "REACT_APP_API_URL=http://54.148.39.8/api" > .env.production
+          echo "REACT_APP_API_URL=http://54.148.39.8" > .env.production
 
       - name: Build React App
         run: |
