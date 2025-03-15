@@ -20,8 +20,8 @@ jobs:
 
       - name: Create .env.production file
         run: |
-          echo "REACT_APP_API_URL=http://54.148.39.8" > .env.production
-
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env.production
+          cat .env.production  # 환경 변수 확인 (디버깅용)
       - name: Build React App
         run: |
           export CI=false  # ESLint 경고 무시

@@ -11,6 +11,7 @@ function Login() {
     const [showForgotModal, setShowForgotModal] = useState(false); // 모달 상태
     const [email, setEmail] = useState(''); // 이메일 입력 상태
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+    console.log("API URL:", API_URL);  // 디버깅용
 
     const handleChange = (e) => {
         setFormData({
