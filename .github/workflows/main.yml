@@ -28,6 +28,11 @@ jobs:
           npm install
           npm run build
           ls -l build
+          
+      - name: Check Built React App
+        run: |
+          grep -r "REACT_APP_API_URL" build/ || echo "No REACT_APP_API_URL found"
+
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
