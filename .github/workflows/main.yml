@@ -32,7 +32,7 @@ jobs:
           
       - name: Check Built React App
         run: |
-          grep -r "REACT_APP_API_URL" build/ || echo "No REACT_APP_API_URL found"
+          grep -r "${{ secrets.REACT_APP_API_URL }}" build/ || echo "API URL not injected"
 
 
       - name: Login to DockerHub
@@ -54,6 +54,10 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKER_REPO_FE }}:latest
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+
+
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
