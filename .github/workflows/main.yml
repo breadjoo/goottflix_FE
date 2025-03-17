@@ -18,22 +18,23 @@ jobs:
         with:
           node-version: 18
 
-      - name: Create .env.production file
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Create .env.production file for React build
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env.production
-          cat .env.production  # 환경 변수 확인 (디버깅용)
-      - name: Build React App
+          cat .env.production  # 디버깅용 출력
+
+      - name: Build React App with env
         run: |
-          export REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
-          export CI=false  # ESLint 경고 무시
-          npm install
-          npm run build
+          export CI=false
+          npx cross-env REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} npm run build
           ls -l build
-          
-      - name: Check Built React App
+
+      - name: Check Built React App for API URL Injection
         run: |
           grep -r "${{ secrets.REACT_APP_API_URL }}" build/ || echo "API URL not injected"
-
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -44,8 +45,6 @@ jobs:
       - name: Check nginx.conf file
         run: ls -l nginx.conf
 
-
-
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v6
         with:
@@ -54,10 +53,6 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKER_REPO_FE }}:latest
-          build-args: |
-            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
-
-
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -68,9 +63,9 @@ jobs:
           script: |
             echo "✅ 기존 컨테이너 중지 및 삭제"
             sudo docker ps -qa | xargs -r sudo docker rm -f
-            
+
             echo "✅ 사용하지 않는 Docker 이미지 정리"
-            sudo docker image prune -f  # 사용되지 않는 이미지 삭제 (최신 이미지 다운로드 전에 실행)
+            sudo docker image prune -f
 
             echo "✅ 최신 Docker 이미지 가져오기"
             sudo docker pull ${{ secrets.DOCKER_REPO_FE }}:latest
