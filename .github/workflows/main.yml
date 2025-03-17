@@ -54,6 +54,9 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKER_REPO_FE }}:latest
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+
 
       # ✅ STEP 6: Debug 2 - Check inside Docker image
       - name: Debug Docker Image Files
