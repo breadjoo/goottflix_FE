@@ -81,7 +81,7 @@ function ChatRoom({ roomId }) {  // props로 roomId 받기
             formData.append('file', file);
 
             try {
-                const response = await axios.post('http://localhost:8080/api/upload/image', formData, {
+                const response = await axios.post(`${API_URL}/api/upload/image`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
