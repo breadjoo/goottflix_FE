@@ -10,6 +10,7 @@ import Login from './function/Login';
 import UserProfile from "./function/UserProfile";
 import Signup from './function/SignUp';
 import NotificationComponent from "./function/NotificationComponent";
+import Popup from "./function/Popup";
 import WatchMovie from "./function/WatchMovie";
 import Description from "./function/Description";
 import EditProfile from "./function/EditProfile";
@@ -44,6 +45,7 @@ function App() {
                     {/* 메인 페이지 */}
                     <Route path="/" element={ <>
                                 <ImageSlider />
+                                <Popup />
                                 <Header />
                                 <div className="container">
                                     <MainContent />
