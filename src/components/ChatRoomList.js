@@ -45,18 +45,19 @@ function ChatRoomList({ setSelectedRoomId }) {
                 console.error('Error creating chat room:', error);
             });
     };
-
     const deleteChatRoom = (roomId) => {
         if (window.confirm("정말로 이 채팅방을 삭제하시겠습니까?")) {
             axios.delete(`${API_URL}/api/chatroom/${roomId}`)
                 .then(() => {
                     setChatRooms(prevRooms => prevRooms.filter(room => room.id !== roomId));
+                    setSelectedRoomId(null); // 삭제 후 선택된 채팅방을 해제
                 })
                 .catch(error => {
                     console.error('Error deleting chat room:', error);
                 });
         }
     };
+
 
     return (
         <div className="chatroom-list-container">
