@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+import 'swiper/css/navigation';
 import '../css/ImageSlider.css';
-import axios from "axios"; // CSS 파일을 추가
+import axios from 'axios';
 
 window.IMP.init("imp77446200");
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -37,7 +43,6 @@ const subscribe_success = async () => {
     }
 }
 
-
 const images = [
     '/images/기생충.jpg',
     '/images/인사이드아웃.jpg',
@@ -51,37 +56,39 @@ const images = [
 ];
 
 const ImageSlider = () => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 5000); // 5초마다 이미지 변경
-
-        return () => clearInterval(interval); // 컴포넌트 언마운트 시 interval 제거
-    }, []);
-
     return (
-        <div
-            className="image-slider"
-            style={{
-                backgroundImage: `url(${images[currentImageIndex]})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: '70vh', // 높이를 화면의 50%로 설정 (반으로 줄임)
-                position: 'relative', // 텍스트를 배경 위에 오버레이
-            }}
-        >
-            <div className="overlay"></div>
-            <div className="slider-content">
-                <h1>당신에게 최고의 영화는 무엇인가요?</h1>
-                <p>심심한데 뭐 볼만한거 없을까?</p>
-                {/*<p>마음에 드는 영화, 지금 리뷰하고 평가해보세요!</p>*/}
-                <button className="cta-button" onClick={onClickPay}>구독하기!</button>
-            </div>
+        <div className="image-slider-wrapper">
+            <Swiper
+                modules={[Autoplay, Pagination, Navigation, EffectFade]}
+                autoplay={{ delay: 5000 }}
+                effect="fade"
+                pagination={{ clickable: true }}
+                navigation={true}
+                loop={true}
+            >
+                {images.map((img, idx) => (
+                    <SwiperSlide key={idx}>
+                        <div
+                            className="image-slide"
+                            style={{
+                                backgroundImage: `url(${img})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                height: '70vh'
+                            }}
+                        >
+                            <div className="overlay"></div>
+                            <div className="slider-content">
+                                <h1>당신에게 최고의 영화는 무엇인가요?</h1>
+                                <p>심심한데 뭐 볼만한거 없을까?</p>
+                                <button className="cta-button" onClick={onClickPay}>구독하기!</button>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         </div>
     );
 };
-
 
 export default ImageSlider;
