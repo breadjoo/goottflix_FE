@@ -33,7 +33,7 @@ const UserProfile = () => {
     // 랜덤 이미지 선택 함수
     const getRandomImage = () => {
         const randomIndex = Math.floor(Math.random() * randomImages.length);
-        return randomImages[randomIndex];
+        return process.env.PUBLIC_URL + randomImages[randomIndex]; // 절대 경로
     };
 
     const formatExpirationDate = (expiration) => {
@@ -136,6 +136,7 @@ const UserProfile = () => {
                     </div>
                     <Image
                         src={profile.profileImage ? `${API_URL}${profile.profileImage}` : getRandomImage()}
+                        onError={(e) => { e.target.onerror = null; e.target.src = getRandomImage(); }}
                         roundedCircle
                         style={{ width: '150px', height: '150px', objectFit: 'cover', marginBottom: '15px' }}
                         alt="프로필 이미지"
