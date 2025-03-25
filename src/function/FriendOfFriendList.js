@@ -11,22 +11,22 @@ const FriendOfFriendList = () => {
 
     // 랜덤 이미지 배열
     const randomImages = [
-        '/images/아바타1.jpg',
-        '/images/아바타2.jpg',
-        '/images/아바타3.jpg',
-        '/images/아바타4.jpg',
-        '/images/아바타5.jpg',
-        '/images/아바타6.jpg',
-        '/images/아바타7.jpg',
-        '/images/아바타8.jpg',
-        '/images/아바타9.jpg',
-        '/images/아바타10.jpg'
+        '/images/아바타1.JPG',
+        '/images/아바타2.JPG',
+        '/images/아바타3.JPG',
+        '/images/아바타4.JPG',
+        '/images/아바타5.JPG',
+        '/images/아바타6.JPG',
+        '/images/아바타7.JPG',
+        '/images/아바타8.JPG',
+        '/images/아바타9.JPG',
+        '/images/아바타10.JPG'
     ];
 
     // 랜덤 이미지 선택 함수
     const getRandomImage = () => {
         const randomIndex = Math.floor(Math.random() * randomImages.length);
-        return randomImages[randomIndex];
+        return process.env.PUBLIC_URL + randomImages[randomIndex];
     };
 
     useEffect(() => {
@@ -62,8 +62,9 @@ const FriendOfFriendList = () => {
                             <Card.Body className="d-flex align-items-center">
                                 <Image
                                     src={friend.profileImage ? `${API_URL}${friend.profileImage}` : getRandomImage()}
+                                    onError={(e) => { e.target.onerror = null; e.target.src = getRandomImage(); }}
                                     roundedCircle
-                                    style={{ width: '80px', height: '80px', objectFit: 'cover', marginRight: '15px', cursor: 'pointer' }}
+                                    style={{ width: '60px', height: '60px', objectFit: 'cover', marginBottom: '1px' }}
                                     alt="프로필 이미지"
                                     onClick={() => handleFriendClick(friend.friendId)}
                                 />

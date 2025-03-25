@@ -138,7 +138,7 @@ const UserProfile = () => {
                         src={profile.profileImage ? `${API_URL}${profile.profileImage}` : getRandomImage()}
                         onError={(e) => { e.target.onerror = null; e.target.src = getRandomImage(); }}
                         roundedCircle
-                        style={{ width: '150px', height: '150px', objectFit: 'cover', marginBottom: '15px' }}
+                        style={{ width: '100px', height: '100px', objectFit: 'cover', marginBottom: '1px' }}
                         alt="프로필 이미지"
                     />
                     <h4>{profile.username}</h4>

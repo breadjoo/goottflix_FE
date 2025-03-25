@@ -18,15 +18,21 @@ const FriendProfile = () => {
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
     const randomImages = [
-        '/images/아바타1.jpg', '/images/아바타2.jpg', '/images/아바타3.jpg',
-        '/images/아바타4.jpg', '/images/아바타5.jpg', '/images/아바타6.jpg',
-        '/images/아바타7.jpg', '/images/아바타8.jpg', '/images/아바타9.jpg',
-        '/images/아바타10.jpg'
+        '/images/아바타1.JPG',
+        '/images/아바타2.JPG',
+        '/images/아바타3.JPG',
+        '/images/아바타4.JPG',
+        '/images/아바타5.JPG',
+        '/images/아바타6.JPG',
+        '/images/아바타7.JPG',
+        '/images/아바타8.JPG',
+        '/images/아바타9.JPG',
+        '/images/아바타10.JPG'
     ];
 
     const getRandomImage = () => {
         const randomIndex = Math.floor(Math.random() * randomImages.length);
-        return randomImages[randomIndex];
+        return process.env.PUBLIC_URL + randomImages[randomIndex];
     };
 
     useEffect(() => {
@@ -107,8 +113,9 @@ const FriendProfile = () => {
                 <Card.Body className="text-center">
                     <Image
                         src={profile.profileImage ? `${API_URL}${profile.profileImage}` : getRandomImage()}
+                        onError={(e) => { e.target.onerror = null; e.target.src = getRandomImage(); }}
                         roundedCircle
-                        style={{ width: '150px', height: '150px', objectFit: 'cover', marginBottom: '15px' }}
+                        style={{ width: '100px', height: '100px', objectFit: 'cover', marginBottom: '1px' }}
                         alt="프로필 이미지"
                     />
                     <h4>{profile.username}</h4>
