@@ -164,7 +164,7 @@ const Navbar = () => {
                                     <button className="nav-link btn btn-link" onClick={handleLogout}>로그아웃</button>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/noticeWrite" onClick={closeMenu}>공지사항 작성</Link>
+                                    <Link className="nav-link" to="/noticeBoard" onClick={closeMenu}>공지사항</Link>
                                 </li>
 
                                 {/* 관리자 페이지는 role이 'ROLE_ADMIN'일 때만 표시 */}
